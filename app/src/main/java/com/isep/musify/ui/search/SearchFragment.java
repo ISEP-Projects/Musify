@@ -1,4 +1,4 @@
-package com.isep.musify.ui.dashboard;
+package com.isep.musify.ui.search;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,17 +12,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.isep.musify.R;
 
-public class DashboardFragment extends Fragment {
+public class SearchFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private SearchViewModel searchViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        searchViewModel =
+                new ViewModelProvider(this).get(SearchViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_search, container, false);
+        final TextView textView = root.findViewById(R.id.text_search);
+        searchViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
