@@ -83,3 +83,4 @@ lint/tmp/
 # lint/reports/
 
 Credentials
+app/src/main/java/com/isep/musify/Credentials.java
