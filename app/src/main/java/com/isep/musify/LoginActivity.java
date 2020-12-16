@@ -19,11 +19,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1023;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
 
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
@@ -46,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
                 // Response was successful and contains auth token
                 case TOKEN:
                     // Handle successful response
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
                     break;
 
                 // Auth flow returned an error
