@@ -14,10 +14,12 @@ import com.spotify.protocol.client.Subscription;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "7ecba07b6d0f409da5ca9d8839456be9";
-    private static final String REDIRECT_URI = "musify://callback";
+    Credentials credentials = new Credentials();
+    private final String CLIENT_ID = credentials.getClientID();
+    private final String REDIRECT_URI = credentials.getRedirectURI();
     private SpotifyAppRemote mSpotifyAppRemote;
 
     @Override
