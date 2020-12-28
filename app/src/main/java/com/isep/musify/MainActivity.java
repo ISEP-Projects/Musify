@@ -1,6 +1,7 @@
 package com.isep.musify;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -8,9 +9,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class MainActivity extends AppCompatActivity {
+
+    private String acessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        acessToken = getIntent().getStringExtra("AccessToken");
+        Log.d("Spotify", "Access Token received: " + acessToken);
     }
+
+
+
 
 }
