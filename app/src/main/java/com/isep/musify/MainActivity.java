@@ -4,21 +4,20 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.isep.musify.ui.DataViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private String acessToken;
+    private String accessToken;
+    private DataViewModel dataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        acessToken = getIntent().getStringExtra("AccessToken");
-        Log.d("Spotify", "Access Token received: " + acessToken);
+        accessToken = getIntent().getStringExtra("AccessToken");
+        dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
+        dataViewModel.setAccessToken(accessToken);
+        //Log.d("Musify", "Access Token received in Main Activity: " + accessToken);
     }
 
 
