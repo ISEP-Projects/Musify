@@ -6,46 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".ui.search.SearchFragment">
 
-    <TextView
-        android:id="@+id/text_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search Fragment"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/searchInput"
         android:layout_width="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:hint="Search for Song/Artist/Album"
+        android:hint="Search for Track"
         app:layout_constraintEnd_toStartOf="@+id/btnSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_search" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSearch"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/searchInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_search"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"/>
 
-    <TextView
-        android:id="@+id/output"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tracksRecyclerView"
         android:layout_marginTop="20dp"
-        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@+id/searchInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="OUTPUT"
-        app:layout_constraintTop_toBottomOf="@+id/searchInput"/>
+        android:layout_height="wrap_content"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

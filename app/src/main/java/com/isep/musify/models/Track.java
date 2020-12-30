@@ -13,8 +13,14 @@ public class Track {
     private String popularity;
     private String uri;
 
-    public Track() {
-        this.artists = new ArrayList<>();
+    public Track(String id, List<Artist> artists, Album album, String href, String name, String popularity, String uri) {
+        this.id = id;
+        this.artists = artists;
+        this.album = album;
+        this.href = href;
+        this.name = name;
+        this.popularity = popularity;
+        this.uri = uri;
     }
 
     public String getId() {
@@ -75,5 +81,18 @@ public class Track {
 
     public void setAlbum(Album album) {
         this.album = album;
+    }
+
+    @Override
+    public String toString() {
+        return "Track{" +
+                "id='" + id + '\'' +
+                ", artists=" + artists +
+                ", album=" + album +
+                ", href='" + href + '\'' +
+                ", name='" + name + '\'' +
+                ", popularity='" + popularity + '\'' +
+                ", uri='" + uri + '\'' +
+                '}';
     }
 }
