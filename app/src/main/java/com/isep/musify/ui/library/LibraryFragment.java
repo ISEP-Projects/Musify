@@ -1,6 +1,7 @@
 package com.isep.musify.ui.library;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.isep.musify.R;
 
+
 public class LibraryFragment extends Fragment {
 
     private LibraryViewModel libraryViewModel;
@@ -21,11 +23,11 @@ public class LibraryFragment extends Fragment {
         libraryViewModel =
                 new ViewModelProvider(this).get(LibraryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_library, container, false);
-        final TextView textView = root.findViewById(R.id.text_library);
+        //final TextView textView = root.findViewById(R.id.text_library);
         libraryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                //textView.setText(s);
             }
         });
         return root;
