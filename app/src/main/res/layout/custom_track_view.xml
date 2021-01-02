@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/trackIcon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/trackName"
+            android:layout_weight="2"
+            android:text="Track"
+            android:gravity="center_vertical"
+            android:textFontWeight="600"
+            android:paddingLeft="20sp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/trackDescription"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:text="Track"
+            android:paddingLeft="20sp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+
+</LinearLayout>
