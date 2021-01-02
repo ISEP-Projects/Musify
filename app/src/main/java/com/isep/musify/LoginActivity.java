@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 //Spotify Dependencies
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -43,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
             switch (response.getType()) {
                 // Response was successful and contains auth token
                 case TOKEN:
-                    // Handle successful response
                     Intent i = new Intent(this, MainActivity.class);
+                    i.putExtra("AccessToken", response.getAccessToken());
                     startActivity(i);
                     break;
 
