@@ -9,22 +9,14 @@
     tools:context=".ui.library.LibraryFragment" >
 
 
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sizeTabLayout"
-        android:background="@color/teal_700"
-        app:title="Musify"/>
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200"
+        android:background="@color/purple_200"
         app:tabTextColor="@color/white"
         app:tabSelectedTextColor="@color/white"
-        app:tabIndicatorColor="@android:color/holo_green_light"
+        app:tabIndicatorColor="@color/purple_500"
         app:tabGravity="fill"
         app:tabMode="fixed" />
 

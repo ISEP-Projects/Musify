@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
 import com.isep.musify.ui.library.AlbumsFragment;
 import com.isep.musify.ui.library.ArtistsFragment;
 import com.isep.musify.ui.LibraryFragmentAdapter;
@@ -20,7 +19,6 @@ import java.util.List;
 
 public class LibraryActivity extends AppCompatActivity {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
-    private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,10 +26,7 @@ public class LibraryActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_library);
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mTabLayout.addTab(mTabLayout.newTab().setText(sTitle[0]));
-        mTabLayout.addTab(mTabLayout.newTab().setText(sTitle[1]));
-        mTabLayout.addTab(mTabLayout.newTab().setText(sTitle[2]));
+
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(PlaylistsFragment.newInstance());
         fragments.add(ArtistsFragment.newInstance());
