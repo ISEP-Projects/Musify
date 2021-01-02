@@ -18,7 +18,7 @@ public class PlaylistsFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.playlists_fragment_layout,null);
+        View view = inflater.inflate(R.layout.fragment_playlists,null);
         return view;
     }
 

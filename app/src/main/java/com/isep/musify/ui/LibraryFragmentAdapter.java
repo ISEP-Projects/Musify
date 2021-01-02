@@ -1,4 +1,4 @@
-package com.isep.musify.ui.library;
+package com.isep.musify.ui;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -6,10 +6,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-public class MyFragmentAdapter extends FragmentStatePagerAdapter {
+public class LibraryFragmentAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> mFragments ;
     private List<String> mTitles ;
-    public MyFragmentAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
+    public LibraryFragmentAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
         super(fm);
         mFragments = fragments;
         mTitles = titles;

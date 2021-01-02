@@ -18,7 +18,7 @@ public class AlbumsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.album_fragment_layout,null);
+        View view = inflater.inflate(R.layout.fragment_albums,null);
         return view;
     }
 

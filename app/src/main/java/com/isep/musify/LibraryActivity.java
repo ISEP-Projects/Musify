@@ -1,4 +1,4 @@
-package com.isep.musify.ui.library;
+package com.isep.musify;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.isep.musify.R;
+import com.isep.musify.ui.library.AlbumsFragment;
+import com.isep.musify.ui.library.ArtistsFragment;
+import com.isep.musify.ui.LibraryFragmentAdapter;
+import com.isep.musify.ui.library.PlaylistsFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class LibraryActivity extends AppCompatActivity {
-    public static final String []sTitle = new String[]{"Playlists","Artists","Albums"};
+    private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
@@ -33,7 +36,8 @@ public class LibraryActivity extends AppCompatActivity {
         fragments.add(PlaylistsFragment.newInstance());
         fragments.add(ArtistsFragment.newInstance());
         fragments.add(AlbumsFragment.newInstance());
-        MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),fragments, Arrays.asList(sTitle));
+
+        LibraryFragmentAdapter adapter = new LibraryFragmentAdapter(getSupportFragmentManager(),fragments, Arrays.asList(sTitle));
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
