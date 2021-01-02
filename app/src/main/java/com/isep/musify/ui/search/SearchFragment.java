@@ -34,7 +34,6 @@ import java.util.List;
 
 public class SearchFragment extends Fragment implements TracksAdapter.TrackClickListener {
 
-    TextView textView;
     EditText searchInput;
     Button button;
     private DataViewModel dataViewModel;

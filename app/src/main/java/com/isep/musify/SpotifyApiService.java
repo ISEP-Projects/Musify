@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 //Single<JsonElement> getMovieList(@Query("movie_lang") String userLanguage);
 
 public interface SpotifyApiService {
-    @GET("search?type=track%2Cartist%2Calbum&market=FR&limit=1")
+    @GET("search?type=track%2Cartist%2Calbum&market=FR&limit=3")
     Call<ApiResponse> searchTracks(@Query("q") String searchQuery);
 
     //Call<List<Track>> searchTracks(@Query("q") String searchQuery, @Header("Authorization: Bearer") String accessToken);
