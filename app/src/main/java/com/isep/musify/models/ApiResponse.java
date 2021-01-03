@@ -13,14 +13,14 @@ public class ApiResponse {
     @SerializedName("albums")
     private AlbumsResponseObject albumsList;
     @SerializedName("items")
-    private List<Playlist> playList;
+    private List<LibraryItem> libraryItems;
 
 
-    public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList, List<Playlist> playList) {
+    public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList, List<LibraryItem> libraryItems) {
         this.tracksList = tracksList;
         this.artistsList = artistsList;
         this.albumsList = albumsList;
-        this.playList = playList;
+        this.libraryItems = libraryItems;
     }
 
     public TracksResponseObject getTracksList() {
@@ -32,7 +32,5 @@ public class ApiResponse {
     public AlbumsResponseObject getAlbumsList() {
         return albumsList;
     }
-    public List<Playlist> getPlayList() { return playList; }
-
-
+    public List<LibraryItem> getLibraryItems() { return libraryItems; }
 }

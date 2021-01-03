@@ -13,29 +13,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.isep.musify.CustomCallback;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
-import com.isep.musify.models.Album;
 import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.Artist;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
-import com.isep.musify.models.Playlist;
-import com.isep.musify.models.Track;
+import com.isep.musify.models.LibraryItem;
 import com.isep.musify.ui.DataViewModel;
-import com.isep.musify.ui.LibraryFragmentAdapter;
 import com.isep.musify.ui.TracksAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
-public class LibraryFragment extends Fragment {
+public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private RecyclerView recyclerView;
@@ -44,24 +39,18 @@ public class LibraryFragment extends Fragment {
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, artistsItems, albumsItems;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+        Log.i("Musify" , "Access Token received in library Fragment: " + dataViewModel.getAccessToken());
+
         View root = inflater.inflate(R.layout.fragment_library, container, false);
-        //final TextView textView = root.findViewById(R.id.text_library);
-        mTabLayout = (TabLayout) root.findViewById(R.id.tabLayout);
+        recyclerView = root.findViewById(R.id.playlistRecyclerView);
+        mTabLayout = root.findViewById(R.id.tabLayout);
         mTabLayout.addTab(mTabLayout.newTab().setText(sTitle[0]));
         mTabLayout.addTab(mTabLayout.newTab().setText(sTitle[1]));
         mTabLayout.addTab(mTabLayout.newTab().setText(sTitle[2]));
-        Log.i("Musify" , "Access Token received in library Fragment: " + dataViewModel.getAccessToken());
-        recyclerView = (RecyclerView) root.findViewById(R.id.playlistRecyclerView);
-        //textView = root.findViewById(R.id.textView);
-        playlistsItems = new ArrayList<>();
-        artistsItems = new ArrayList<>();
-        albumsItems = new ArrayList<>();
-        playlistsSpotifyAPI();
-        artistsSpotifyAPI();
 
+        initialData();
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -72,21 +61,14 @@ public class LibraryFragment extends Fragment {
                 } else if ("Artists".equals(text)) {
                     updateList(artistsItems);
                 } else if ("Albums".equals(text)) {
-                    return;
+                    updateList(albumsItems);
                 }
             }
-
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
+            public void onTabUnselected(TabLayout.Tab tab) { }
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) { }
         });
-
         return root;
     }
 
@@ -97,17 +79,14 @@ public class LibraryFragment extends Fragment {
             public void onSuccess(ApiResponse value) {
                 Log.d("library", "onSuccess response: " + value);
 
-                List<Playlist> playlists = value.getPlayList();
+                List<LibraryItem> playlists = value.getLibraryItems();
 
                 for(int i = 0; i < playlists.size(); i++){
                     String name = playlists.get(i).getName();
-                    //String description = playlists.get(i).getDescription();
-                    String owner = "By " + playlists.get(i).getOwner().getDisplay_name();
-                    Log.d("Musify", "Playlist: " + name + "\n " + owner);
+                    String description = "by " + playlists.get(i).getOwner().getDisplay_name();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, owner, href);
-                    Log.d("Musify", "Playlist converted to item!\n" + item.toString());
+                    Item item = new Item(images.get(images.size()-1), name, description, href);
                     playlistsItems.add(item);
                 }
                 updateList(playlistsItems);
@@ -115,7 +94,6 @@ public class LibraryFragment extends Fragment {
 
             @Override
             public void onFailure() {
-                Log.d("Musify", "Error fetching tracks from api");
                 Toast.makeText(getContext().getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
             }
         });
@@ -135,11 +113,33 @@ public class LibraryFragment extends Fragment {
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
                     Item item = new Item(images.get(images.size()-1), name, description, href);
-                    Log.d("Musify", "artists List converted to item!\n" + item.toString());
                     artistsItems.add(item);
                 }
-                updateList(artistsItems);
+            }
 
+            @Override
+            public void onFailure() {
+                Log.d("Musify", "Error fetching tracks from api");
+                Toast.makeText(getContext().getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public void albumsSpotifyAPI(){
+        RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
+        apiConnection.albumsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+            @Override
+            public void onSuccess(ApiResponse value) {
+                //Log.d("Artists", "onSuccess response: " + value.getArtistsList().getArtists().size());
+                List<LibraryItem> albumsList = value.getLibraryItems();
+
+                for(int i = 0; i < albumsList.size(); i++){
+                    String name = albumsList.get(i).getAlbum().getName();
+                    String description = albumsList.get(i).getAddedAt();
+                    List<Image> images = albumsList.get(i).getAlbum().getImages();
+                    String href = albumsList.get(i).getAlbum().getHref();
+                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    albumsItems.add(item);
+                }
             }
 
             @Override
@@ -154,6 +154,22 @@ public class LibraryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new TracksAdapter(list);
+        adapter.setClickListener(this);
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
+    }
+
+    public void initialData(){
+        playlistsItems = new ArrayList<>();
+        artistsItems = new ArrayList<>();
+        albumsItems = new ArrayList<>();
+        playlistsSpotifyAPI();
+        artistsSpotifyAPI();
+        albumsSpotifyAPI();
+    }
+
+    @Override
+    public void onTrackClick(View view, int position) {
+        Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
     }
 }

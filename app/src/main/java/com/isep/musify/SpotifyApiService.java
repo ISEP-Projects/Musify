@@ -27,4 +27,7 @@ public interface SpotifyApiService {
 
     @GET("me/following?type=artist")
     Call<ApiResponse> myFollowingArtist();
+
+    @GET("me/albums")
+    Call<ApiResponse> mySavedAlbums();
 }

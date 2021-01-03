@@ -1,9 +1,11 @@
 package com.isep.musify.models;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
-public class Playlist {
+public class LibraryItem {
     private String id;
     private String name;
     private Owner owner;
@@ -11,6 +13,17 @@ public class Playlist {
     private String description;
     private List<Image> images;
     private String href;
+    @SerializedName("added_at")
+    private String addedAt;
+    private Album album;
+
+    public String getAddedAt() {
+        return addedAt;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
 
     public String getHref() {
         return href;
@@ -41,7 +54,7 @@ public class Playlist {
         return images;
     }
 
-    public Playlist(String id, String name, Owner owner, boolean collaborative, String description, List<Image> images, String href) {
+    public LibraryItem(String addedAt, Album album, String id, String name, Owner owner, boolean collaborative, String description, List<Image> images, String href) {
         this.id = id;
         this.name = name;
         this.owner = owner;
@@ -49,5 +62,7 @@ public class Playlist {
         this.description = description;
         this.images = images;
         this.href = href;
+        this.addedAt = addedAt;
+        this.album = album;
     }
 }
