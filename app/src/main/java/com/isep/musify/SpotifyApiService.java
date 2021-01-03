@@ -24,4 +24,7 @@ public interface SpotifyApiService {
     //Call<List<Song>> randomSongs(@Path("number") int number);
     @GET("me/playlists")
     Call<ApiResponse> myPlaylists();
+
+    @GET("me/following?type=artist")
+    Call<ApiResponse> myFollowingArtist();
 }

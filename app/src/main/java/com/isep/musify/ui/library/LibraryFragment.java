@@ -42,6 +42,7 @@ public class LibraryFragment extends Fragment {
     private TextView textView;
     private TracksAdapter adapter;
     private DataViewModel dataViewModel;
+    private List<Item> playlistsItems, artistsItems, albumsItems;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -55,17 +56,24 @@ public class LibraryFragment extends Fragment {
         Log.i("Musify" , "Access Token received in library Fragment: " + dataViewModel.getAccessToken());
         recyclerView = (RecyclerView) root.findViewById(R.id.playlistRecyclerView);
         //textView = root.findViewById(R.id.textView);
-
-        librarySpotifyAPI();
+        playlistsItems = new ArrayList<>();
+        artistsItems = new ArrayList<>();
+        albumsItems = new ArrayList<>();
+        playlistsSpotifyAPI();
+        artistsSpotifyAPI();
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.i("tab","onTabSelected:"+tab.getText());
-                textView.setText(tab.getText());
-                //recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
-                //adapter = new TracksAdapter(null);
-                //recyclerView.setAdapter(adapter);
+                CharSequence text = tab.getText();
+                if ("Playlists".equals(text)) {
+                    updateList(playlistsItems);
+                } else if ("Artists".equals(text)) {
+                    updateList(artistsItems);
+                } else if ("Albums".equals(text)) {
+                    return;
+                }
             }
 
             @Override
@@ -82,13 +90,13 @@ public class LibraryFragment extends Fragment {
         return root;
     }
 
-    public void librarySpotifyAPI() {
+    public void playlistsSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.libraryApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
             @Override
             public void onSuccess(ApiResponse value) {
                 Log.d("library", "onSuccess response: " + value);
-                List<Item> itemsList = new ArrayList<>();
+
                 List<Playlist> playlists = value.getPlayList();
 
                 for(int i = 0; i < playlists.size(); i++){
@@ -100,9 +108,37 @@ public class LibraryFragment extends Fragment {
                     String href = playlists.get(i).getHref();
                     Item item = new Item(images.get(images.size()-1), name, owner, href);
                     Log.d("Musify", "Playlist converted to item!\n" + item.toString());
-                    itemsList.add(item);
+                    playlistsItems.add(item);
                 }
-                updateList(itemsList);
+                updateList(playlistsItems);
+            }
+
+            @Override
+            public void onFailure() {
+                Log.d("Musify", "Error fetching tracks from api");
+                Toast.makeText(getContext().getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void artistsSpotifyAPI(){
+        RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
+        apiConnection.artistsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+            @Override
+            public void onSuccess(ApiResponse value) {
+                Log.d("Artists", "onSuccess response: " + value.getArtistsList().getArtists().size());
+                List<Artist> artistsList = value.getArtistsList().getArtists();
+
+                for(int i = 0; i < artistsList.size(); i++){
+                    String name = artistsList.get(i).getName();
+                    String description = "Artist ";
+                    List<Image> images = artistsList.get(i).getImages();
+                    String href = artistsList.get(i).getHref();
+                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    Log.d("Musify", "artists List converted to item!\n" + item.toString());
+                    artistsItems.add(item);
+                }
+                updateList(artistsItems);
 
             }
 
@@ -113,6 +149,7 @@ public class LibraryFragment extends Fragment {
             }
         });
     }
+
     public void updateList(List<Item> list){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
