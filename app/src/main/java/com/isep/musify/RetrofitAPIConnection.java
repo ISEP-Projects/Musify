@@ -164,4 +164,33 @@ public class RetrofitAPIConnection {
 
             }
         });}
+
+    public void NewReleasesApiRequest(String AccessToken, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.getLatestAlbums();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                Log.d("Musify Call", call.request().toString());
+                if (response.code() == 200) {
+                    customCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "albumsApiRequest Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+        });
+    }
 }

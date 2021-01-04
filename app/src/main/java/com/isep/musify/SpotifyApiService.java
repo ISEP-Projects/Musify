@@ -20,6 +20,9 @@ public interface SpotifyApiService {
     @GET("me")
     Call<Profile> currentUser();
 
+    @GET("browse/new-releases?country=FR")
+    Call<ApiResponse> getLatestAlbums();
+
     @GET("me/playlists")
     Call<ApiResponse> myPlaylists();
     //Call<List<Track>> searchTracks(@Query("q") String searchQuery, @Header("Authorization: Bearer") String accessToken);
