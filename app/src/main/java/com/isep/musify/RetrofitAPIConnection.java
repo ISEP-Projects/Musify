@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.Profile;
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.search.SearchFragment;
 
@@ -96,4 +97,71 @@ public class RetrofitAPIConnection {
             }
         });
     }
+
+
+
+
+    public void currentUserApiRequest(String AccessToken,CustomCallback customCallback){
+
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        //Interface instance
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<Profile> call = spotifyApiService.currentUser();
+
+        //Custom callback to send the data retrieved(JSON) back to the function as an object
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                Log.d("Musify Call", call.request().toString());
+
+                if (response.code() == 200) {
+                    Log.d("Musify", "Response " + response.body().toString());
+
+                    Log.d("Musify", "Data response from API received");
+                    customCallback.onProfileSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "Response " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+        });
+
+    }
+    public void playlistsApiRequest(String AccessToken, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.myPlaylists();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.code() == 200) {
+                    //Log.d("Musify", "Response " + response.body().getLibraryItems().size());
+                    customCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "playlistsApiRequest Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+        });}
 }

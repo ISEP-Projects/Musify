@@ -1,6 +1,8 @@
 package com.isep.musify;
 
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.Profile;
+import com.isep.musify.models.ProfileResponseObject;
 import com.isep.musify.models.TracksResponseObject;
 
 import retrofit2.Call;
@@ -15,6 +17,11 @@ public interface SpotifyApiService {
     @GET("search?type=track%2Cartist%2Calbum&market=FR&limit=3")
     Call<ApiResponse> searchTracks(@Query("q") String searchQuery);
 
+    @GET("me")
+    Call<Profile> currentUser();
+
+    @GET("me/playlists")
+    Call<ApiResponse> myPlaylists();
     //Call<List<Track>> searchTracks(@Query("q") String searchQuery, @Header("Authorization: Bearer") String accessToken);
 
     //@GET("?q={track}&type=track")
