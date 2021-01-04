@@ -1,5 +1,8 @@
 package com.isep.musify.ui.home;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -73,9 +78,13 @@ public class HomeFragment extends Fragment {
                 //Saving objects of different types into a unified list to display in Recyclerview
            profile.setText("Welcome back! "+value.getDisplay_name());
                 List<Image> image = value.getImages();
+                imageView.setClipToOutline(true);
+
+
                 Picasso.get()
                         .load(image.get(0).getUrl())
                         .into(imageView);
+
            Log.d("Profile value = ",""+value);
            // textView.setText((CharSequence) value.getProfile().getName());
             }
