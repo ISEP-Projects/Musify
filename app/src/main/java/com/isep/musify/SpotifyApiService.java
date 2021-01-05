@@ -1,6 +1,8 @@
 package com.isep.musify;
 
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.NewReleaseItem;
+import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
 import com.isep.musify.models.ProfileResponseObject;
 import com.isep.musify.models.TracksResponseObject;
@@ -21,10 +23,13 @@ public interface SpotifyApiService {
     Call<Profile> currentUser();
 
     @GET("browse/new-releases?country=FR")
-    Call<ApiResponse> getLatestAlbums();
+    Call<NewReleaseItem> getLatestAlbums();
 
     @GET("me/playlists")
     Call<ApiResponse> myPlaylists();
+
+    @GET("browse/featured-playlists")
+    Call<ApiResponse> getFeaturedLists();
     //Call<List<Track>> searchTracks(@Query("q") String searchQuery, @Header("Authorization: Bearer") String accessToken);
 
     //@GET("?q={track}&type=track")

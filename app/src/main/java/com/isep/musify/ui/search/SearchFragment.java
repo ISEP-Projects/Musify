@@ -24,6 +24,8 @@ import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.Artist;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
+import com.isep.musify.models.NewReleaseItem;
+import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.DataViewModel;
@@ -135,6 +137,12 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
             public void onProfileSuccess(Profile value) {
 
             }
+
+            @Override
+            public void onNewRelease(NewReleaseItem value) {
+
+            }
+
 
             @Override
             public void onFailure() {
