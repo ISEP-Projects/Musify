@@ -21,6 +21,7 @@ import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.models.Album;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
@@ -139,9 +140,10 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
             }
 
             @Override
-            public void onNewRelease(NewReleaseItem value) {
+            public void onNewReleaseAlbum(ApiResponseNewAlbums value) {
 
             }
+
 
 
             @Override

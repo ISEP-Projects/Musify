@@ -1,6 +1,7 @@
 package com.isep.musify;
 
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.NewReleaseItem;
 import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
@@ -23,7 +24,7 @@ public interface SpotifyApiService {
     Call<Profile> currentUser();
 
     @GET("browse/new-releases?country=FR")
-    Call<NewReleaseItem> getLatestAlbums();
+    Call<ApiResponseNewAlbums> getLatestAlbums();
 
     @GET("me/playlists")
     Call<ApiResponse> myPlaylists();

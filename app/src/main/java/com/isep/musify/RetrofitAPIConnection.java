@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.NewReleaseItem;
 import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
@@ -168,14 +169,14 @@ public class RetrofitAPIConnection {
         Retrofit retrofit = getRetrofitBuilder(AccessToken);
 
         SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
-        Call<NewReleaseItem> call = spotifyApiService.getLatestAlbums();
+        Call<ApiResponseNewAlbums> call = spotifyApiService.getLatestAlbums();
 
-        call.enqueue(new Callback<NewReleaseItem>() {
+        call.enqueue(new Callback<ApiResponseNewAlbums>() {
             @Override
-            public void onResponse(Call<NewReleaseItem> call, Response<NewReleaseItem> response) {
+            public void onResponse(Call<ApiResponseNewAlbums> call, Response<ApiResponseNewAlbums> response) {
                 Log.d("Musify Call", call.request().toString());
                 if (response.code() == 200) {
-                    customCallback.onNewRelease(response.body());
+                    customCallback.onNewReleaseAlbum(response.body());
                 } else {
                     try {
                         Log.d("Musify Body Error", "albumsApiRequest Response: " + response.errorBody().string());
@@ -186,9 +187,11 @@ public class RetrofitAPIConnection {
             }
 
             @Override
-            public void onFailure(Call<NewReleaseItem> call, Throwable t) {
+            public void onFailure(Call<ApiResponseNewAlbums> call, Throwable t) {
 
             }
+
+
 
 
         });
