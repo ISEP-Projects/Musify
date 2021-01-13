@@ -9,6 +9,7 @@ public class Artist {
     private List<Image> images;
     private String type;
     private String uri;
+    private int popularity;
 
     public String getHref() {
         return href;
@@ -34,14 +35,20 @@ public class Artist {
         return uri;
     }
 
+    public int getPopularity() {
+        return popularity;
+    }
+
     @Override
     public String toString() {
         return "Artist{" +
                 "href='" + href + '\'' +
                 ", id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", images=" + images +
                 ", type='" + type + '\'' +
                 ", uri='" + uri + '\'' +
+                ", popularity=" + popularity +
                 '}';
     }
 }

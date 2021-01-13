@@ -15,8 +15,7 @@ public class ApiResponse {
     @SerializedName("items")
     private List<LibraryItem> libraryItems;
 
-
-    public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList, List<LibraryItem> libraryItems) {
+    public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList) {
         this.tracksList = tracksList;
         this.artistsList = artistsList;
         this.albumsList = albumsList;

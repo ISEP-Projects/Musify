@@ -16,4 +16,9 @@
         android:icon="@drawable/baseline_library_24"
         android:title="@string/title_library" />
 
+    <item
+        android:id="@+id/navigation_game"
+        android:icon="@drawable/ic_baseline_videogame_asset_24"
+        android:title="@string/title_game" />
+
 </menu>

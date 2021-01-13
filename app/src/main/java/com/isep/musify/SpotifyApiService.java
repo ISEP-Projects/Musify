@@ -13,15 +13,11 @@ import retrofit2.http.Query;
 
 public interface SpotifyApiService {
     @GET("search?type=track%2Cartist%2Calbum&market=FR&limit=3")
-    Call<ApiResponse> searchTracks(@Query("q") String searchQuery);
+    Call<ApiResponse> searchAPI(@Query("q") String searchQuery);
 
-    //Call<List<Track>> searchTracks(@Query("q") String searchQuery, @Header("Authorization: Bearer") String accessToken);
+    @GET("search?type=artist&market=FR&limit=4")
+    Call<ApiResponse> getArtists(@Query("q") Character searchQuery);
 
-    //@GET("?q={track}&type=track")
-    //Call<Track> getSongById(@Path("songId") String songId);
-
-    //@GET("songs/random/{number}")
-    //Call<List<Song>> randomSongs(@Path("number") int number);
     @GET("me/playlists")
     Call<ApiResponse> myPlaylists();
 

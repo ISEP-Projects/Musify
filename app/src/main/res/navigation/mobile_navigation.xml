@@ -22,4 +22,10 @@
         android:name="com.isep.musify.ui.library.LibraryFragment"
         android:label="@string/title_library"
         tools:layout="@layout/fragment_library" />
+
+    <fragment
+        android:id="@+id/navigation_game"
+        android:name="com.isep.musify.ui.game.GameFragment"
+        android:label="@string/title_game"
+        tools:layout="@layout/fragment_game" />
 </navigation>
