@@ -1,8 +1,8 @@
 package com.isep.musify;
 
 public class Credentials {
-    private static final String ClientID = "393ffdcc7a754669956775f8ef8daf39";
-    private static final String RedirectURI = "musify://callback";
+    private static final String ClientID = "client id";
+    private static final String RedirectURI = "callback";
 
     public static String getClientID() {
         return ClientID;
