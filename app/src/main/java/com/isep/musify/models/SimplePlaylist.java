@@ -1,19 +1,47 @@
 package com.isep.musify.models;
 
-public class SimplePlaylist {
-    private String name;
-    private String img_url;
+import java.util.List;
 
-    public SimplePlaylist(String name, String img_url) {
-        this.name = name;
-        this.img_url = img_url;
+public class SimplePlaylist {
+
+    private String description;
+    private String id;
+    private List<Image> images = null;
+    private String name;
+    private Profile owner;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public List<Image> getImages() {
+        return images;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getImg_url() {
-        return img_url;
+    public Profile getOwner() {
+        return owner;
     }
+
+    public Track getTracks() {
+        return tracks;
+    }
+
+    public SimplePlaylist(String description, String id, List<Image> images, String name, Profile owner, Track tracks) {
+        this.description = description;
+        this.id = id;
+        this.images = images;
+        this.name = name;
+        this.owner = owner;
+        this.tracks = tracks;
+    }
+
+    private Track tracks;
 }

@@ -24,9 +24,11 @@ import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
+import com.isep.musify.models.LatestList;
 import com.isep.musify.models.LibraryItem;
 import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
+import com.isep.musify.models.SimplePlaylist;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.TracksAdapter;
 import com.squareup.picasso.Picasso;
@@ -41,7 +43,7 @@ public class HomeFragment extends Fragment {
     ImageView imageView;
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, newPlaylists,newAlbums;
-    private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums;
+    private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums,recyclerView_Featured_Playlist;
     private TracksAdapter tracksAdapter,playlistAdapter;
     private Timer timer;
     private TimerTask timerTask;
@@ -54,6 +56,7 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
          recyclerView_Made_For_You = root.findViewById(R.id.RV_playlist);
          recyclerView_newAlbums =root.findViewById(R.id.newAlbumReleases);
+         recyclerView_Featured_Playlist=root.findViewById(R.id.FeaturedLists);
 
 
 
@@ -64,6 +67,7 @@ public class HomeFragment extends Fragment {
         init();
         updateList(playlistsItems,0);
         updateList(newAlbums,1);
+        updateList(newPlaylists,3);
         currentUserAPI();
 
         if(recyclerView_Made_For_You.getAdapter().getItemCount()!=0){
@@ -74,12 +78,19 @@ public class HomeFragment extends Fragment {
             position=recyclerView_newAlbums.getAdapter().getItemCount() / 2;
             recyclerView_newAlbums.scrollToPosition(position/2);
         }
+        if(recyclerView_Featured_Playlist.getAdapter().getItemCount()!=0){
+            position=recyclerView_Featured_Playlist.getAdapter().getItemCount() / 2;
+            recyclerView_Featured_Playlist.scrollToPosition(position/2);
+        }
         SnapHelper snapHelper = new LinearSnapHelper();
         SnapHelper snapHelper1= new LinearSnapHelper();
+        SnapHelper snapHelper2=new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView_Made_For_You);
         recyclerView_Made_For_You.smoothScrollBy(5,0);
         snapHelper1.attachToRecyclerView(recyclerView_newAlbums);
         recyclerView_newAlbums.smoothScrollBy(5,0);
+        snapHelper2.attachToRecyclerView(recyclerView_Featured_Playlist);
+        recyclerView_Featured_Playlist.smoothScrollBy(5,0);
 
 
 
@@ -181,8 +192,9 @@ public class HomeFragment extends Fragment {
     public void init(){
         playlistsItems = new ArrayList<>();
         newAlbums=new ArrayList<>();
+        newPlaylists=new ArrayList<>();
         playlistsSpotifyAPI();
-       // latestPlaylistSpotifyAPI();
+        latestPlaylistSpotifyAPI();
         newAlbumsAPI();
 
     }
@@ -253,6 +265,37 @@ switch(flag) {
                 }
             }
         });
+        break;
+    case 3:
+        recyclerView_Featured_Playlist.setHasFixedSize(true);
+        recyclerView_Featured_Playlist.setLayoutManager(layoutManager);
+        tracksAdapter = new TracksAdapter(list);
+        tracksAdapter.notifyDataSetChanged();
+        recyclerView_Featured_Playlist.setAdapter(tracksAdapter);
+
+        recyclerView_Featured_Playlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int totalItemCount = recyclerView_Featured_Playlist.getAdapter().getItemCount();
+                if (totalItemCount <= 0) return;
+                int lastVisibleItemIndex = layoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItemIndex >= totalItemCount) return;
+                layoutManager.smoothScrollToPosition(recyclerView_Featured_Playlist, null, lastVisibleItemIndex + 1);
+            }
+        });
+        recyclerView_Featured_Playlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == 1) {
+                    stopAutoScrollBanner();
+                } else if (newState == 0) {
+                    position = layoutManager.findFirstCompletelyVisibleItemPosition();
+                    runAutoScrollBanner();
+                }
+            }
+        });
     } }
     public void playlistsSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
@@ -292,28 +335,32 @@ switch(flag) {
         });
     }
 
-    /*public void latestPlaylistSpotifyAPI() {
+    public void latestPlaylistSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
         apiConnection.LatestPlaylist(dataViewModel.getAccessToken(), new CustomCallback() {
             @Override
             public void onSuccess(ApiResponse value) {
-                Log.d("library", "onSuccess response: " + value);
+                Log.d("Featured Playlists", "onSuccess response: " + value);
 
-                List<NewReleases> playlists = value.getReleases();
+                List<SimplePlaylist> playlists = value.getFeaturedList().getFeaturedLists();
 
                 for(int i = 0; i < playlists.size(); i++){
                     String name = playlists.get(i).getName();
-                    String description = "by " + playlists.get(i).getArtists().get(i).getName();
+                    String description = "by " + playlists.get(i).getDescription();
                     List<Image> images = playlists.get(i).getImages();
-                    String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    Item item = new Item(images.get(images.size()-1), name, description, "");
                    newPlaylists.add(item);
                 }
-                updateList(newPlaylists,1);
+                updateList(newPlaylists,3);
             }
 
             @Override
             public void onProfileSuccess(Profile value) {
+
+            }
+
+            @Override
+            protected void onNewReleaseAlbum(ApiResponseNewAlbums value) {
 
             }
 
@@ -324,7 +371,7 @@ switch(flag) {
         });
     }
 
-*/
+
     private void stopAutoScrollBanner() {
         if (timer != null && timerTask != null) {
             timerTask.cancel();

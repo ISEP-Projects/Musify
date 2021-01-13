@@ -16,6 +16,8 @@ public class ApiResponse {
     private ProfileResponseObject profile;
     @SerializedName("items")
     private List<LibraryItem> libraryItems;
+    @SerializedName("playlists")
+    private LatestList playlists;
 
 
     public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList) {
@@ -26,6 +28,7 @@ public class ApiResponse {
     public ApiResponse(ProfileResponseObject profileName){
         this.profile=profileName;
     }
+    //public ApiResponse(LatestList lists){this.playlists=  lists;}
     public ProfileResponseObject getProfile(){return profile;}
     public TracksResponseObject getTracksList() {
         return tracksList;
@@ -37,5 +40,6 @@ public class ApiResponse {
         return albumsList;
     }
     public List<LibraryItem> getLibraryItems() { return libraryItems; }
-
+    public LatestList getFeaturedList(){return playlists;}
+    //public LatestList getFeaturedLists() {return playlists;}
 }

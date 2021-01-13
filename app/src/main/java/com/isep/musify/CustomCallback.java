@@ -9,11 +9,11 @@ import com.isep.musify.models.Track;
 
 import java.util.List;
 
-public abstract interface CustomCallback {
+public abstract class CustomCallback {
 
-     void onSuccess(ApiResponse value);
-    void onProfileSuccess(Profile value);
-    void onNewReleaseAlbum(ApiResponseNewAlbums value);
-    void onFailure();
+     protected abstract void onSuccess(ApiResponse value);
+    protected abstract void onProfileSuccess(Profile value);
+    protected abstract void onNewReleaseAlbum(ApiResponseNewAlbums value);
+    protected abstract void onFailure();
 
 }
