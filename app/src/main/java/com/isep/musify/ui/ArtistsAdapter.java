@@ -51,7 +51,7 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.MyViewHo
     public ArtistsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listTrack= layoutInflater.inflate(R.layout.custom_track_view, parent, false);
+        View listTrack= layoutInflater.inflate(R.layout.custom_artist_view, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(listTrack);
         return viewHolder;
     }
