@@ -23,6 +23,7 @@ import com.isep.musify.models.Artist;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
 import com.isep.musify.models.LibraryItem;
+import com.isep.musify.ui.ArtistsAdapter;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.TracksAdapter;
 
@@ -30,12 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener {
+public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener,ArtistsAdapter.ArtistClickListener {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private RecyclerView recyclerView;
     private TextView textView;
-    private TracksAdapter adapter;
+    private TracksAdapter tracksAdapter;
+    private ArtistsAdapter artistsAdapter;
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, artistsItems, albumsItems;
 
@@ -59,7 +61,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                 if ("Playlists".equals(text)) {
                     updateList(playlistsItems);
                 } else if ("Artists".equals(text)) {
-                    updateList(artistsItems);
+                    updateArtistList(artistsItems);
                 } else if ("Albums".equals(text)) {
                     updateList(albumsItems);
                 }
@@ -153,10 +155,21 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     public void updateList(List<Item> list){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TracksAdapter(list);
-        adapter.setClickListener(this);
-        adapter.notifyDataSetChanged();
-        recyclerView.setAdapter(adapter);
+        tracksAdapter = new TracksAdapter(list);
+        tracksAdapter.setClickListener(this);
+        tracksAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(tracksAdapter);
+    }
+
+    public void updateArtistList(List<Item> list){
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Log.d("musify" , String.valueOf(list.size()));
+        artistsAdapter = new ArtistsAdapter(list);
+
+        artistsAdapter.setClickListener(this::onArtistClick);
+        artistsAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(artistsAdapter);
     }
 
     public void initialData(){
@@ -171,5 +184,10 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     @Override
     public void onTrackClick(View view, int position) {
         Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onArtistClick(View view, int position) {
+
     }
 }
