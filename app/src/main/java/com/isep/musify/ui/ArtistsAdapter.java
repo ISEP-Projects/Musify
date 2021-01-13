@@ -64,7 +64,6 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.MyViewHo
         Picasso.get()
                 .load(image.getUrl())
                 .into(holder.imageView);
-
     }
 
     @Override
