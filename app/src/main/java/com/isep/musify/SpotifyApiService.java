@@ -1,10 +1,11 @@
 package com.isep.musify;
 
 import com.isep.musify.models.ApiResponse;
-import com.isep.musify.models.TracksResponseObject;
+import com.isep.musify.models.PlaylistResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 // http://service.com/movies/list?movie_lang=hindi
@@ -24,6 +25,9 @@ public interface SpotifyApiService {
     //Call<List<Song>> randomSongs(@Path("number") int number);
     @GET("me/playlists")
     Call<ApiResponse> myPlaylists();
+
+    @GET("playlists/{playlist_id}")
+    Call<PlaylistResponse> myPlaylist(@Path("playlist_id")  String playlist_id);
 
     @GET("me/following?type=artist")
     Call<ApiResponse> myFollowingArtist();

@@ -15,4 +15,8 @@
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_library">Library</string>
+
+    <!-- Library -->
+    <string name="play_button">Play</string>
+    <string name="title_activity_library">LibraryActivity</string>
 </resources>

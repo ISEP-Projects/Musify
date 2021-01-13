@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.PlaylistResponse;
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.search.SearchFragment;
 
@@ -182,6 +183,35 @@ public class RetrofitAPIConnection {
                 Log.d("Musify Error", t.getMessage());
 
             }
+        });
+    }
+
+    public void myPlaylistApiRequest(String AccessToken, String playlistId, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<PlaylistResponse> call = spotifyApiService.myPlaylist(playlistId);
+
+        call.enqueue(new Callback<PlaylistResponse>() {
+            @Override
+            public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
+                Log.d("Musify Call", call.request().toString());
+                if (response.code() == 200) {
+                    customCallback.onSuccessForPlaylist(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "my Playlist Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaylistResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+            }
+
         });
     }
 }

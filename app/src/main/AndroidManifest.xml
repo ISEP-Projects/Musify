@@ -14,6 +14,10 @@
             android:label="@string/title_activity_main" >
         </activity>
         <activity
+            android:name=".LibraryActivity"
+            android:label="@string/title_activity_library" >
+        </activity>
+        <activity
             android:name=".LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
