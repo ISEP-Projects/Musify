@@ -13,13 +13,13 @@
 
         <TableRow
             android:id="@+id/row1"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="98dp"
-                android:layout_height="86dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
                 android:background="@drawable/profile_foreground"
                 android:contentDescription="Profile image"
@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
                 android:layout_marginEnd="291dp"
+                android:paddingLeft="18dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -53,8 +54,8 @@
         />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RV_playlist"
-            android:layout_width="417dp"
-            android:layout_height="171dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:orientation="horizontal"
             android:padding="5dp"
@@ -77,8 +78,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/newAlbumReleases"
-        android:layout_width="412dp"
-        android:layout_height="207dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,8 +97,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/FeaturedLists"
-            android:layout_width="412dp"
-            android:layout_height="207dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             />
 

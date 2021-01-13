@@ -1,6 +1,7 @@
 package com.isep.musify.ui.home;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
 import com.isep.musify.models.SimplePlaylist;
 import com.isep.musify.ui.DataViewModel;
+import com.isep.musify.ui.GalleryAdapter;
 import com.isep.musify.ui.TracksAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -44,7 +46,8 @@ public class HomeFragment extends Fragment {
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, newPlaylists,newAlbums;
     private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums,recyclerView_Featured_Playlist;
-    private TracksAdapter tracksAdapter,playlistAdapter;
+    //private TracksAdapter tracksAdapter;
+    private GalleryAdapter galleryAdapter,tracksAdapter;
     private Timer timer;
     private TimerTask timerTask;
     private int position;
@@ -64,6 +67,8 @@ public class HomeFragment extends Fragment {
         imageView=root.findViewById(R.id.imageView);
 
        //textView = root.findViewById(R.id.text_home);
+
+
         init();
         updateList(playlistsItems,0);
         updateList(newAlbums,1);
@@ -207,7 +212,7 @@ switch(flag) {
     case 0:
         recyclerView_Made_For_You.setHasFixedSize(true);
         recyclerView_Made_For_You.setLayoutManager(layoutManager);
-        tracksAdapter = new TracksAdapter(list);
+        tracksAdapter = new GalleryAdapter(list);
         tracksAdapter.notifyDataSetChanged();
         recyclerView_Made_For_You.setAdapter(tracksAdapter);
 
@@ -238,7 +243,7 @@ switch(flag) {
     case 1:
         recyclerView_newAlbums.setHasFixedSize(true);
         recyclerView_newAlbums.setLayoutManager(layoutManager);
-        tracksAdapter = new TracksAdapter(list);
+        tracksAdapter = new GalleryAdapter(list);
         tracksAdapter.notifyDataSetChanged();
         recyclerView_newAlbums.setAdapter(tracksAdapter);
 
@@ -269,9 +274,9 @@ switch(flag) {
     case 3:
         recyclerView_Featured_Playlist.setHasFixedSize(true);
         recyclerView_Featured_Playlist.setLayoutManager(layoutManager);
-        tracksAdapter = new TracksAdapter(list);
-        tracksAdapter.notifyDataSetChanged();
-        recyclerView_Featured_Playlist.setAdapter(tracksAdapter);
+        galleryAdapter = new GalleryAdapter(list);
+        galleryAdapter.notifyDataSetChanged();
+        recyclerView_Featured_Playlist.setAdapter(galleryAdapter);
 
         recyclerView_Featured_Playlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,10 +399,13 @@ switch(flag) {
                         recyclerView_Made_For_You.smoothScrollBy(5, 0);
                         recyclerView_newAlbums.scrollToPosition(position);
                         recyclerView_newAlbums.smoothScrollBy(5, 0);
+                        recyclerView_Featured_Playlist.scrollToPosition(position);
+                        recyclerView_Featured_Playlist.smoothScrollBy(5, 0);
                     } else {
                         position++;
                         recyclerView_Made_For_You.smoothScrollToPosition(position);
                         recyclerView_newAlbums.smoothScrollToPosition(position);
+                        recyclerView_Featured_Playlist.smoothScrollToPosition(position);
                     }
                 }
             };
