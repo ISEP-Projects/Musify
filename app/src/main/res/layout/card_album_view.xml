@@ -30,8 +30,7 @@ android:layout_height="wrap_content">
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="3"
-            android:gravity="center_vertical"
-            android:paddingLeft="40sp"
+            android:gravity="center_horizontal"
             android:text="Track"
             android:textFontWeight="600"
 

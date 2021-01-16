@@ -15,24 +15,25 @@
             android:id="@+id/row1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
 
-            <ImageView
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"/>
 
-                android:background="@drawable/profile_foreground"
-                android:contentDescription="Profile image"
-
-                tools:src="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="38dp"
+                android:layout_marginTop="42dp"
                 android:layout_marginEnd="291dp"
                 android:paddingLeft="18dp"
+                android:textSize="16sp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:text="Made for you By YOU"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="18sp"
@@ -72,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Newly released Albums"
+            android:layout_marginTop="25dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="18sp" />
@@ -91,6 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Featured Playlists"
+            android:layout_marginTop="25dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="18sp" />

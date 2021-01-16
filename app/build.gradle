@@ -54,4 +54,7 @@ dependencies {
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Circular ImageVIew
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
 }
