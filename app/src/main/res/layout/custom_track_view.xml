@@ -7,7 +7,7 @@
     android:padding="5dp">
 
     <ImageView
-        android:id="@+id/trackIcon"
+        android:id="@+id/Icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"/>
@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:layout_weight="1">
         <TextView
-            android:id="@+id/trackName"
+            android:id="@+id/Name"
             android:layout_weight="2"
             android:text="Track"
             android:gravity="center_vertical"

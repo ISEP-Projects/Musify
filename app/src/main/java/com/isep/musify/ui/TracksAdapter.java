@@ -32,9 +32,9 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.MyViewHold
         public ImageView imageView;
         public MyViewHolder(View v) {
             super(v);
-            textView1 = v.findViewById(R.id.trackName);
+            textView1 = v.findViewById(R.id.Name);
             textView2 = v.findViewById(R.id.trackDescription);
-            imageView = v.findViewById(R.id.trackIcon);
+            imageView = v.findViewById(R.id.Icon);
             v.setOnClickListener(this);
         }
         @Override
