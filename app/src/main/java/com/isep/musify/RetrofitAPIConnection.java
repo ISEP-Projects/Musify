@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isep.musify.models.ApiResponse;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
 
 
 import okhttp3.Interceptor;
@@ -28,6 +29,8 @@ public class RetrofitAPIConnection {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
+
+        //AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder()
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
@@ -210,8 +213,36 @@ public class RetrofitAPIConnection {
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("Musify Error", t.getMessage());
+                Log.e("Musify Error", t.getMessage());
 
+            }
+        });
+    }
+
+    public void currentPlayback(String AccessToken, CustomPlaybackCallback playbackCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.getPlayback();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.code() == 200) {
+                    //Log.d("Musify", response.raw().toString());
+                    playbackCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify", "Current Playback error " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("Musify Error", t.getMessage());
             }
         });
     }

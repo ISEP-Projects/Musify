@@ -97,36 +97,39 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
 
                //Saving Tracks as Custom Items
                 for(int i = 0; i < tracksList.size(); i++){
+                    String id = tracksList.get(i).getId();
                     String name = tracksList.get(i).getName();
                     String description = "Track  |  " + tracksList.get(i).getArtists().get(0).getName();
                     //Log.d("Musify", "Artist for " + name + "\n" + tracksList.get(i).getArtists().get(0).toString());
                     List<Image> images = tracksList.get(i).getAlbum().getImages();
                     String href = tracksList.get(i).getHref();
                     String uri = tracksList.get(i).getUri();
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href, uri, i);
+                    Item item = new Item(id, "Track", images.get(images.size()-1), images.get(0), name, description, href, uri, i);
                     //Log.d("Musify", "Track converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
 
                 //Saving Albums as Custom Items
                 for(int i = 0; i < albumsList.size(); i++){
+                    String id = albumsList.get(i).getId();
                     String name = albumsList.get(i).getName();
                     String description = "Album  |  " + tracksList.get(i).getArtists().get(0).getName();
                     //Log.d("Musify", "Album by " + name + "\n" + tracksList.get(i).getArtists().get(0).toString());
                     List<Image> images = albumsList.get(i).getImages();
                     String href = albumsList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                    Item item = new Item(id, "Album", images.get(images.size()-1), images.get(0), name, description, href);
                     //Log.d("Musify", "Album converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
 
                 //Saving Artists as Custom Items
                 for(int i = 0; i < artistsList.size(); i++){
+                    String id = artistsList.get(i).getId();
                     String name = artistsList.get(i).getName();
                     String description = "Artist ";
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                    Item item = new Item(id, "Artist", images.get(images.size()-1), images.get(0), name, description, href);
                     //Log.d("Musify", "Artist converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
@@ -155,13 +158,26 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.d("Musify", "Position " + position);
-        Log.d("Musify", "Items List " + itemsList.size());
-        Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
-        Intent i = new Intent(getContext(), TrackDetails.class);
-        i.putExtra("AccessToken", dataViewModel.getAccessToken());
-        i.putExtra("Track", itemsList.get(position));
-        startActivity(i);
+        //Log.d("Musify", "Position " + position);
+        //Log.d("Musify", "Items List " + itemsList.size());
+        //Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
+        Item item = itemsList.get(position);
+        switch(item.getType()){
+            case "Track":
+                Intent i = new Intent(getContext(), TrackDetails.class);
+                i.putExtra("AccessToken", dataViewModel.getAccessToken());
+                i.putExtra("Track", itemsList.get(position));
+                startActivity(i);
+                break;
+            case "Album":
+                break;
+
+            case "Artist":
+                break;
+
+            default:
+                Log.e("Musify", "Unkown Item type\n" + item.toString());
+        }
 
         /*
         if(item.getDescription().contains("Track")){

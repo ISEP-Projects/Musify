@@ -62,6 +62,30 @@
         android:onClick="pause"
         android:text="PAUSE"/>
 
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlay"
+        app:layout_constraintBottom_toTopOf="@+id/btnPause"
+        app:layout_constraintStart_toEndOf="@+id/btnPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginVertical="30dp"
+        android:onClick="next"
+        android:text="NEXT"/>
+
+    <Button
+        android:id="@+id/btnPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlay"
+        app:layout_constraintBottom_toTopOf="@+id/btnPause"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPlay"
+        android:layout_marginVertical="30dp"
+        android:onClick="previous"
+        android:text="PREV"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

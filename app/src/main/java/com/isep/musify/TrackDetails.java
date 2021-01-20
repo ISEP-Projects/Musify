@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.Item;
+import com.isep.musify.models.PlaybackResponseObject;
 import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp;
 import com.spotify.android.appremote.api.error.NotLoggedInException;
 import com.spotify.android.appremote.api.error.UserNotAuthorizedException;
@@ -19,9 +21,6 @@ import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 
-import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.PlayerState;
-import com.spotify.protocol.types.Track;
 
 public class TrackDetails extends AppCompatActivity {
 
@@ -29,6 +28,7 @@ public class TrackDetails extends AppCompatActivity {
     private final String CLIENT_ID = credentials.getClientID();
     private final String REDIRECT_URI = credentials.getRedirectURI();
     private SpotifyAppRemote mSpotifyAppRemote;
+    private PlaybackResponseObject playback;    //Store response
 
     private String accessToken;
     private ImageView trackImage;
@@ -48,12 +48,8 @@ public class TrackDetails extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         track = (Item) data.getParcelable("Track");
         //Log.d("Musify", "URL: " + track.getCoverUrl());
-        Picasso.get()
-                .load(track.getCoverUrl())
-                .into(trackImage);
-        trackName.setText(track.getName());
-        trackDescription.setText(track.getDescription());
 
+        updateUI();
     }
 
     @Override
@@ -96,11 +92,21 @@ public class TrackDetails extends AppCompatActivity {
                 .setResultCallback(playerState -> {
                     Log.d("Musify", playerState.track.name + " by " + playerState.track.artist.name);
                     if (playerState.isPaused && playerState.track.name.equals(track.getName())) {
-                        Log.d("Musify", " TRUE ");
+                        Log.d("Musify", "Resuming");
                         mSpotifyAppRemote.getPlayerApi().resume();
                     } else {
+                        Log.d("Musify", "Playing");
                         mSpotifyAppRemote.getPlayerApi().play(track.getUri());
                     }
+                });
+        mSpotifyAppRemote.getPlayerApi().subscribeToPlayerState()
+                .setEventCallback(playerState -> {
+                    if(!playerState.track.name.equals(track.getName())){
+                        updatePlayer();
+                    }
+                })
+                .setErrorCallback(throwable -> {
+
                 });
     }
 
@@ -108,4 +114,50 @@ public class TrackDetails extends AppCompatActivity {
         mSpotifyAppRemote.getPlayerApi().pause();
     }
 
+    //Fetch data from API regarding currently playing track
+    //Required when original track finishes playing and moves to the next track
+    public void updatePlayer(){
+        RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
+        apiConnection.currentPlayback(accessToken, new CustomPlaybackCallback(){
+
+            @Override
+            public void onSuccess(ApiResponse value) {
+                if(value.getPlaybackResponse() != null) {
+                    playback = value.getPlaybackResponse();
+                    Log.d("Musify", "Playback!\n" + playback.toString());
+                    String id = playback.getId();
+                    String name = playback.getName();
+                    String description = playback.getArtists().get(0).getName();
+                    String url = playback.getAlbum().getImages().get(0).getUrl();
+                    String uri = playback.getUri();
+                    track = new Item(id, url, name, description, uri);
+                    updateUI();
+                }
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+    }
+
+    //Update UI with the current track data
+    public void updateUI(){
+        Picasso.get()
+                .load(track.getCoverUrl())
+                .into(trackImage);
+        trackName.setText(track.getName());
+        trackDescription.setText(track.getDescription());
+    }
+
+    public void next(View view) {
+        mSpotifyAppRemote.getPlayerApi().skipNext();
+        updatePlayer();
+    }
+
+    public void previous(View view) {
+        mSpotifyAppRemote.getPlayerApi().skipPrevious();
+        updatePlayer();
+    }
 }

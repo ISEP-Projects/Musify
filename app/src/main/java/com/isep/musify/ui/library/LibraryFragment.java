@@ -86,7 +86,7 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
                     String description = "by " + playlists.get(i).getOwner().getDisplay_name();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                        Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     playlistsItems.add(item);
                 }
                 updateList(playlistsItems);
