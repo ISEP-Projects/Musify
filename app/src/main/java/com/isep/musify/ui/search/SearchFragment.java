@@ -1,13 +1,14 @@
 package com.isep.musify.ui.search;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,8 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.isep.musify.CustomCallback;
+import com.isep.musify.MainActivity;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
+import com.isep.musify.TrackDetails;
 import com.isep.musify.models.Album;
 import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.Artist;
@@ -26,23 +29,24 @@ import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.DataViewModel;
-import com.isep.musify.ui.TracksAdapter;
+import com.isep.musify.ui.ItemsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchFragment extends Fragment implements TracksAdapter.TrackClickListener {
+public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickListener {
 
     EditText searchInput;
     Button button;
     private DataViewModel dataViewModel;
 
     private RecyclerView recyclerView;
-    private TracksAdapter adapter;
+    private ItemsAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    //private List<Track> tracksList;
+    private List<Item> itemsList;
+    private List<Track> tracksList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,11 +64,9 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new TracksAdapter(null);
+        adapter = new ItemsAdapter(null);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-
-
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -84,11 +86,11 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
             @Override
             public void onSuccess(ApiResponse value) {
                 //Saving objects of different types into a unified list to display in Recyclerview
-                List<Item> itemsList = new ArrayList<>();
+                itemsList = new ArrayList<>();
                 Log.d("TAG", "onSuccess: " +  value.getTracksList());
 
                 //Retrieve respective lists from object
-                List<Track> tracksList = value.getTracksList().getTracks();
+                tracksList = value.getTracksList().getTracks();
                 List<Album> albumsList = value.getAlbumsList().getAlbums();
                 List<Artist> artistsList = value.getArtistsList().getArtists();
 
@@ -97,11 +99,12 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
                 for(int i = 0; i < tracksList.size(); i++){
                     String name = tracksList.get(i).getName();
                     String description = "Track  |  " + tracksList.get(i).getArtists().get(0).getName();
-                    Log.d("Musify", "Artist for " + name + "\n" + tracksList.get(i).getArtists().get(0).toString());
+                    //Log.d("Musify", "Artist for " + name + "\n" + tracksList.get(i).getArtists().get(0).toString());
                     List<Image> images = tracksList.get(i).getAlbum().getImages();
                     String href = tracksList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
-                    Log.d("Musify", "Track converted to item!\n" + item.toString());
+                    String uri = tracksList.get(i).getUri();
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href, uri, i);
+                    //Log.d("Musify", "Track converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
 
@@ -112,8 +115,8 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
                     //Log.d("Musify", "Album by " + name + "\n" + tracksList.get(i).getArtists().get(0).toString());
                     List<Image> images = albumsList.get(i).getImages();
                     String href = albumsList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
-                    Log.d("Musify", "Album converted to item!\n" + item.toString());
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                    //Log.d("Musify", "Album converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
 
@@ -123,8 +126,8 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
                     String description = "Artist ";
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
-                    Log.d("Musify", "Artist converted to item!\n" + item.toString());
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                    //Log.d("Musify", "Artist converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
 
@@ -142,7 +145,7 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
     public void updateTracksList(List<Item> list){
 
         //Update RecyclerView
-        adapter = new TracksAdapter(list);
+        adapter = new ItemsAdapter(list);
         adapter.setClickListener(this);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
@@ -151,9 +154,26 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
 
 
     @Override
-    public void onTrackClick(View view, int position) {
+    public void onItemClick(View view, int position) {
+        Log.d("Musify", "Position " + position);
+        Log.d("Musify", "Items List " + itemsList.size());
         Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
+        Intent i = new Intent(getContext(), TrackDetails.class);
+        i.putExtra("AccessToken", dataViewModel.getAccessToken());
+        i.putExtra("Track", itemsList.get(position));
+        startActivity(i);
+
+        /*
+        if(item.getDescription().contains("Track")){
+            Intent i = new Intent(getContext(), TrackDetails.class);
+            i.putExtra("AccessToken", dataViewModel.getAccessToken());
+            i.putExtra("Track", (Parcelable) tracksList.get(item.getIndex()));
+            startActivity(i);
+        }
+         */
+
     }
+
 }
 
 

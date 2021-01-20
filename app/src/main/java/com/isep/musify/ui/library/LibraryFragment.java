@@ -24,18 +24,18 @@ import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
 import com.isep.musify.models.LibraryItem;
 import com.isep.musify.ui.DataViewModel;
-import com.isep.musify.ui.TracksAdapter;
+import com.isep.musify.ui.ItemsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener {
+public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickListener {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private RecyclerView recyclerView;
     private TextView textView;
-    private TracksAdapter adapter;
+    private ItemsAdapter adapter;
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, artistsItems, albumsItems;
 
@@ -86,7 +86,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     String description = "by " + playlists.get(i).getOwner().getDisplay_name();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     playlistsItems.add(item);
                 }
                 updateList(playlistsItems);
@@ -112,7 +112,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     String description = "Artist ";
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     artistsItems.add(item);
                 }
             }
@@ -137,7 +137,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     String description = albumsList.get(i).getAddedAt();
                     List<Image> images = albumsList.get(i).getAlbum().getImages();
                     String href = albumsList.get(i).getAlbum().getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     albumsItems.add(item);
                 }
             }
@@ -153,7 +153,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     public void updateList(List<Item> list){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TracksAdapter(list);
+        adapter = new ItemsAdapter(list);
         adapter.setClickListener(this);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
@@ -169,7 +169,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     }
 
     @Override
-    public void onTrackClick(View view, int position) {
+    public void onItemClick(View view, int position) {
         Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
     }
 }
