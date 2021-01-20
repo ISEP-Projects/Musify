@@ -1,6 +1,8 @@
 package com.isep.musify;
 
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ArtistTrackResponse;
+import com.isep.musify.models.ArtistsResponseObject;
 import com.isep.musify.models.PlaylistResponse;
 
 import retrofit2.Call;
@@ -28,6 +30,9 @@ public interface SpotifyApiService {
 
     @GET("playlists/{playlist_id}")
     Call<PlaylistResponse> myPlaylist(@Path("playlist_id")  String playlist_id);
+
+    @GET("artists/{id}/top-tracks?market=FR")
+    Call<ArtistTrackResponse> myArtist(@Path("id")  String artist_id);
 
     @GET("me/following?type=artist")
     Call<ApiResponse> myFollowingArtist();

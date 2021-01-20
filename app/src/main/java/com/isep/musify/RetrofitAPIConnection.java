@@ -8,6 +8,8 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ArtistTrackResponse;
+import com.isep.musify.models.ArtistsResponseObject;
 import com.isep.musify.models.PlaylistResponse;
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.search.SearchFragment;
@@ -211,6 +213,36 @@ public class RetrofitAPIConnection {
             public void onFailure(Call<PlaylistResponse> call, Throwable t) {
                 Log.d("Musify Error", t.getMessage());
             }
+
+        });
+    }
+
+    public void myArtistApiRequest(String AccessToken, String artistId, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ArtistTrackResponse> call = spotifyApiService.myArtist(artistId);
+
+        call.enqueue(new Callback<ArtistTrackResponse>() {
+            @Override
+            public void onResponse(Call<ArtistTrackResponse> call, Response<ArtistTrackResponse> response) {
+                Log.d("Musify Call", call.request().toString());
+                if (response.code() == 200) {
+                    customCallback.onSuccessForArtist(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "my Playlist Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArtistTrackResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+            }
+
 
         });
     }

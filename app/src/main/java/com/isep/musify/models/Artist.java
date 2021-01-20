@@ -9,6 +9,11 @@ public class Artist {
     private List<Image> images;
     private String type;
     private String uri;
+    private Follower followers;
+
+    public Follower getFollowrs() {
+        return followers;
+    }
 
     public String getHref() {
         return href;

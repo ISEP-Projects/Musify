@@ -1,13 +1,13 @@
 package com.isep.musify.models;
 
 public class Follower {
-    private int total;
+    private String total;
 
-    public int getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public Follower(int total) {
+    public Follower(String total) {
         this.total = total;
     }
 }

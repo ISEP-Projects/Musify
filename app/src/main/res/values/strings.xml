@@ -18,5 +18,7 @@
 
     <!-- Library -->
     <string name="play_button">Play</string>
-    <string name="title_activity_library">LibraryActivity</string>
+    <string name="title_activity_playlist">Playlisy</string>
+    <string name="title_activity_artist">Artist</string>
+
 </resources>

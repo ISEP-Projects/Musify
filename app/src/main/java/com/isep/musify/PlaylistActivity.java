@@ -14,38 +14,40 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
-import com.isep.musify.models.LibraryItem;
 import com.isep.musify.models.PlaylistResponse;
 import com.isep.musify.models.SongItem;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.SongAdapter;
-import com.isep.musify.ui.TracksAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryActivity extends AppCompatActivity implements SongAdapter.SongClickListener {
+public class PlaylistActivity extends AppCompatActivity implements SongAdapter.SongClickListener {
 
     private String accessToken, playlistId, imageHref, playlisyName;
     private DataViewModel dataViewModel;
     private List<Item> songslistItems;
     private ImageView image;
     private Button playButton;
-    private TextView nameView;
+    private TextView nameView, followersView;
     private RecyclerView recyclerView;
     private SongAdapter songAdapter;
+    private String followers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_library);
+        setContentView(R.layout.activity_playlist);
 
         image = findViewById(R.id.imageView);
         playButton = findViewById(R.id.play_button);
         nameView = findViewById(R.id.name_textView);
+        followersView = findViewById(R.id.followers_textView);
+
         recyclerView = findViewById(R.id.songlistRecyclerView);
         accessToken = getIntent().getStringExtra("AccessToken");
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
@@ -60,6 +62,8 @@ public class LibraryActivity extends AppCompatActivity implements SongAdapter.So
                 .into(image);
         nameView.setText(playlisyName);
         playlistSpotifyAPI();
+
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +85,9 @@ public class LibraryActivity extends AppCompatActivity implements SongAdapter.So
                 Log.d("library", "onSuccess response: " + value);
 
                 List<SongItem> songslist = value.getPlaylists().getSongList();
-                //int follower = value.getFollower().getTotal();
-                Log.d("songslist", songslist.toString());
+                followers = value.getFollower().getTotal();
+                followersView.setText("Followers: " + followers);
+                Log.d("songslist", value.getFollower().getTotal());
 
                 for(int i = 0; i < songslist.size(); i++){
                     String name = songslist.get(i).getSong().getName();
@@ -93,6 +98,11 @@ public class LibraryActivity extends AppCompatActivity implements SongAdapter.So
                 }
                 Log.d("songslist",songslistItems.toString());
                 updateSonglist(songslistItems);
+            }
+
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
+
             }
 
             @Override

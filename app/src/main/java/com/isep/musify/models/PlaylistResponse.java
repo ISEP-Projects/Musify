@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class PlaylistResponse {
     private String description;
-    private Follower follower;
+    private Follower followers;
     private String href;
     private String id;
     private String name;
@@ -17,7 +17,7 @@ public class PlaylistResponse {
     }
 
     public Follower getFollower() {
-        return follower;
+        return followers;
     }
 
     public String getHref() {
@@ -36,9 +36,9 @@ public class PlaylistResponse {
         return playlists;
     }
 
-    public PlaylistResponse(String description, Follower follower, String href, String id, String name, Playlists playlists) {
+    public PlaylistResponse(String description, Follower followers, String href, String id, String name, Playlists playlists) {
         this.description = description;
-        this.follower = follower;
+        this.followers = followers;
         this.href = href;
         this.id = id;
         this.name = name;

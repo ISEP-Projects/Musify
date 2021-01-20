@@ -14,8 +14,12 @@
             android:label="@string/title_activity_main" >
         </activity>
         <activity
-            android:name=".LibraryActivity"
-            android:label="@string/title_activity_library" >
+            android:name=".PlaylistActivity"
+            android:label="@string/title_activity_playlist" >
+        </activity>
+        <activity
+            android:name=".ArtistActivity"
+            android:label="@string/title_activity_artist" >
         </activity>
         <activity
             android:name=".LoginActivity"
