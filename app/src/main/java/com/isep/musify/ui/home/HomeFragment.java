@@ -1,7 +1,6 @@
 package com.isep.musify.ui.home;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,47 +12,39 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-<<<<<<< HEAD
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-=======
 
+import com.isep.musify.CustomCallbackProfile;
+import com.isep.musify.CustomCallback_Album_Release;
 import com.isep.musify.R;
 import com.isep.musify.ui.DataViewModel;
->>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c
 
-import com.isep.musify.CustomCallback;
-import com.isep.musify.R;
+import com.isep.musify.CustomCallbackSuccess;
 import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
-import com.isep.musify.models.LatestList;
 import com.isep.musify.models.LibraryItem;
 import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
 import com.isep.musify.models.SimplePlaylist;
-import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.GalleryAdapter;
-import com.isep.musify.ui.TracksAdapter;
 import com.squareup.picasso.Picasso;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-=======
-    private HomeViewModel homeViewModel;
-    private DataViewModel dataViewModel;
->>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c
+
 
 public class HomeFragment extends Fragment {
     TextView profile;
     ImageView imageView;
+    private HomeViewModel homeViewModel;
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, newPlaylists,newAlbums;
     private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums,recyclerView_Featured_Playlist;
@@ -68,7 +59,7 @@ public class HomeFragment extends Fragment {
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-<<<<<<< HEAD
+
          recyclerView_Made_For_You = root.findViewById(R.id.RV_playlist);
          recyclerView_newAlbums =root.findViewById(R.id.newAlbumReleases);
          recyclerView_Featured_Playlist=root.findViewById(R.id.FeaturedLists);
@@ -127,11 +118,8 @@ public class HomeFragment extends Fragment {
     }
     private void currentUserAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.currentUserApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
-            @Override
-            public void onSuccess(ApiResponse value) {
+        apiConnection.currentUserApiRequest(dataViewModel.getAccessToken(), new CustomCallbackProfile() {
 
-            }
 
             @Override
             public void onProfileSuccess(Profile value) {
@@ -149,19 +137,7 @@ public class HomeFragment extends Fragment {
            // textView.setText((CharSequence) value.getProfile().getName());
             }
 
-            @Override
-            public void onNewReleaseAlbum(ApiResponseNewAlbums value) {
 
-            }
-
-
-=======
-        final TextView textView = root.findViewById(R.id.text_home);
-
-        dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
->>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c
             @Override
             public void onFailure() {
                 Log.d("Musify", "Error fetching tracks from api");
@@ -172,7 +148,7 @@ public class HomeFragment extends Fragment {
 
     private void newAlbumsAPI(){
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.NewReleasesApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.NewReleasesApiRequest(dataViewModel.getAccessToken(), new CustomCallback_Album_Release() {
             @Override
             public void onNewReleaseAlbum(ApiResponseNewAlbums value) {
 
@@ -192,15 +168,6 @@ public class HomeFragment extends Fragment {
                 updateList(newAlbums,1);
             }
 
-            @Override
-            public void onSuccess(ApiResponse value) {
-
-            }
-
-            @Override
-            public void onProfileSuccess(Profile value) {
-
-            }
 
 
 
@@ -210,7 +177,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext().getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
             }
         });
-<<<<<<< HEAD
+
     }
 
 
@@ -324,7 +291,7 @@ switch(flag) {
     } }
     public void playlistsSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new  CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 Log.d("library", "onSuccess response: " + value);
@@ -342,15 +309,6 @@ switch(flag) {
                 updateList(playlistsItems,0);
             }
 
-            @Override
-            public void onProfileSuccess(Profile value) {
-
-            }
-
-            @Override
-            public void onNewReleaseAlbum(ApiResponseNewAlbums value) {
-
-            }
 
 
             @Override
@@ -362,7 +320,7 @@ switch(flag) {
 
     public void latestPlaylistSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.LatestPlaylist(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.LatestPlaylist(dataViewModel.getAccessToken(), new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 Log.d("Featured Playlists", "onSuccess response: " + value);
@@ -379,15 +337,8 @@ switch(flag) {
                 updateList(newPlaylists,3);
             }
 
-            @Override
-            public void onProfileSuccess(Profile value) {
 
-            }
 
-            @Override
-            protected void onNewReleaseAlbum(ApiResponseNewAlbums value) {
-
-            }
 
             @Override
             public void onFailure() {
@@ -436,10 +387,4 @@ switch(flag) {
 
 }
 
-=======
 
-        return root;
-    }
-
-}
->>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c

@@ -15,14 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
-import com.isep.musify.CustomCallback;
+import com.isep.musify.CustomCallbackSuccess;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
 import com.isep.musify.models.LibraryItem;
+import com.isep.musify.models.Profile;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.TracksAdapter;
 
@@ -74,7 +76,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
 
     public void playlistsSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 Log.d("library", "onSuccess response: " + value);
@@ -92,6 +94,8 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                 updateList(playlistsItems);
             }
 
+
+
             @Override
             public void onFailure() {
                 Toast.makeText(getContext().getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
@@ -101,7 +105,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
 
     public void artistsSpotifyAPI(){
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.artistsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.artistsApiRequest(dataViewModel.getAccessToken(), new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 Log.d("Artists", "onSuccess response: " + value.getArtistsList().getArtists().size());
@@ -117,6 +121,8 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                 }
             }
 
+
+
             @Override
             public void onFailure() {
                 Log.d("Musify", "Error fetching tracks from api");
@@ -126,7 +132,7 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     }
     public void albumsSpotifyAPI(){
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.albumsApiRequest(dataViewModel.getAccessToken(), new CustomCallback() {
+        apiConnection.albumsApiRequest(dataViewModel.getAccessToken(), new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 //Log.d("Artists", "onSuccess response: " + value.getArtistsList().getArtists().size());
@@ -141,6 +147,8 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     albumsItems.add(item);
                 }
             }
+
+
 
             @Override
             public void onFailure() {
