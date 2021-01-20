@@ -26,7 +26,6 @@ public class RetrofitAPIConnection {
     static final String BASE_URL = "https://api.spotify.com/v1/";
 
     public Retrofit getRetrofitBuilder(String AccessToken) {
-        Log.d("Musify", "Running Api connection ");
         //Log.d("Musify", AccessToken);
 
         Gson gson = new GsonBuilder()
@@ -66,19 +65,18 @@ public class RetrofitAPIConnection {
 
         //Interface instance
         SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
-        Call<ApiResponse> call = spotifyApiService.searchTracks(searchQuery);
+        Call<ApiResponse> call = spotifyApiService.searchAPI(searchQuery);
 
         //Custom callback to send the data retrieved(JSON) back to the function as an object
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("Musify Call", call.request().toString());
+                //Log.d("Musify Call", call.request().toString());
 
                 if (response.code() == 200) {
-                    Log.d("Musify", "Response " + response.body().toString());
                     //Log.d("Musify", "Response " + response.body().getTracksList().getTracks().size());
                     //Log.d("Musify", "Response " + response.body().getAlbumsList().getAlbums().size());
-                    Log.d("Musify", "Response " + response.body().getArtistsList().getArtists().size());
+                    //Log.d("Musify", "Response " + response.body().getArtistsList().getArtists().size());
                     Log.d("Musify", "Data response from API received");
                     customCallback.onSuccess(response.body());
                 } else {
@@ -99,7 +97,130 @@ public class RetrofitAPIConnection {
     }
 
 
+    public void getRandomArtists(String AccessToken, Character searchQuery, CustomCallback customCallback){
 
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        //Interface instance
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+
+        Call<ApiResponse> call = spotifyApiService.getArtists(searchQuery);
+
+        //Custom callback to send the data retrieved(JSON) back to the function as an object
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                //Log.d("Musify Call", call.request().toString());
+
+                if (response.code() == 200) {
+                    //Log.d("Musify", "Response " + response.body().getArtistsList().getArtists().size());
+                    //Log.d("Musify", "Data response from API received");
+                    customCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "Response " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+        });
+    }
+
+    public void playlistsApiRequest(String AccessToken, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.myPlaylists();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.code() == 200) {
+                    //Log.d("Musify", "Response " + response.body().getLibraryItems().size());
+                    customCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "playlistsApiRequest Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+
+        });
+
+    }
+
+    public void artistsApiRequest(String AccessToken, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.myFollowingArtist();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.code() == 200) {
+                    //Log.d("Musify", "Response " + response.body().getArtistsList().getArtists().size());;
+                    customCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "artistsApiRequest Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+        });
+    }
+
+    public void albumsApiRequest(String AccessToken, CustomCallback customCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.mySavedAlbums();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                //Log.d("Musify Call", call.request().toString());
+                if (response.code() == 200) {
+                    customCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify Body Error", "albumsApiRequest Response: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Musify Error", t.getMessage());
+
+            }
+        });
+    }
 
     public void currentUserApiRequest(String AccessToken,CustomCallback customCallback){
 
@@ -137,33 +258,6 @@ public class RetrofitAPIConnection {
         });
 
     }
-    public void playlistsApiRequest(String AccessToken, CustomCallback customCallback){
-        Retrofit retrofit = getRetrofitBuilder(AccessToken);
-
-        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
-        Call<ApiResponse> call = spotifyApiService.myPlaylists();
-
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.code() == 200) {
-                    //Log.d("Musify", "Response " + response.body().getLibraryItems().size());
-                    customCallback.onSuccess(response.body());
-                } else {
-                    try {
-                        Log.d("Musify Body Error", "playlistsApiRequest Response: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("Musify Error", t.getMessage());
-
-            }
-        });}
 
     public void NewReleasesApiRequest(String AccessToken, CustomCallback customCallback){
         Retrofit retrofit = getRetrofitBuilder(AccessToken);
@@ -224,4 +318,5 @@ public class RetrofitAPIConnection {
 
             }
         });}
+
 }

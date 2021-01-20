@@ -8,7 +8,9 @@ import java.util.List;
 public class LibraryItem {
     private String id;
     private String name;
-    private Profile owner;
+
+    private Owner owner;
+
     private boolean collaborative;
     private String description;
     private List<Image> images;
@@ -37,7 +39,9 @@ public class LibraryItem {
         return name;
     }
 
-    public Profile getOwner() {
+
+    public Owner getOwner() {
+
         return owner;
     }
 
@@ -54,7 +58,8 @@ public class LibraryItem {
         return images;
     }
 
-    public LibraryItem(String addedAt, Album album, String id, String name, Profile owner, boolean collaborative, String description, List<Image> images, String href) {
+    public LibraryItem(String addedAt, Album album, String id, String name, Owner owner, boolean collaborative, String description, List<Image> images, String href) {
+
         this.id = id;
         this.name = name;
         this.owner = owner;

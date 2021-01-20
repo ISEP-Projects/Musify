@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
         searchInput = root.findViewById(R.id.searchInput);
         button = root.findViewById(R.id.btnSearch);
 
-        //Log.d("Musify" , "Access Token received in Search Fragment: " + dataViewModel.getAccessToken());
+        Log.i("Musify" , "Access Token received in Search Fragment: " + dataViewModel.getAccessToken());
 
         //RecyclerView
         recyclerView.setHasFixedSize(true);
@@ -89,6 +89,7 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
             public void onSuccess(ApiResponse value) {
                 //Saving objects of different types into a unified list to display in Recyclerview
                 List<Item> itemsList = new ArrayList<>();
+                Log.d("TAG", "onSuccess: " +  value.getTracksList());
 
                 //Retrieve respective lists from object
                 List<Track> tracksList = value.getTracksList().getTracks();

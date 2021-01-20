@@ -13,10 +13,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+<<<<<<< HEAD
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+=======
+
+import com.isep.musify.R;
+import com.isep.musify.ui.DataViewModel;
+>>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c
 
 import com.isep.musify.CustomCallback;
 import com.isep.musify.R;
@@ -35,10 +41,15 @@ import com.isep.musify.ui.GalleryAdapter;
 import com.isep.musify.ui.TracksAdapter;
 import com.squareup.picasso.Picasso;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+=======
+    private HomeViewModel homeViewModel;
+    private DataViewModel dataViewModel;
+>>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c
 
 public class HomeFragment extends Fragment {
     TextView profile;
@@ -57,6 +68,7 @@ public class HomeFragment extends Fragment {
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+<<<<<<< HEAD
          recyclerView_Made_For_You = root.findViewById(R.id.RV_playlist);
          recyclerView_newAlbums =root.findViewById(R.id.newAlbumReleases);
          recyclerView_Featured_Playlist=root.findViewById(R.id.FeaturedLists);
@@ -143,6 +155,13 @@ public class HomeFragment extends Fragment {
             }
 
 
+=======
+        final TextView textView = root.findViewById(R.id.text_home);
+
+        dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+
+        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+>>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c
             @Override
             public void onFailure() {
                 Log.d("Musify", "Error fetching tracks from api");
@@ -191,6 +210,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext().getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
             }
         });
+<<<<<<< HEAD
     }
 
 
@@ -416,3 +436,10 @@ switch(flag) {
 
 }
 
+=======
+
+        return root;
+    }
+
+}
+>>>>>>> 18f129a479c5e0a7ec29ff05dbad976ae0e9bf1c

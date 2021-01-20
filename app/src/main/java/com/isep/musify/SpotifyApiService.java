@@ -18,7 +18,11 @@ import retrofit2.http.Query;
 
 public interface SpotifyApiService {
     @GET("search?type=track%2Cartist%2Calbum&market=FR&limit=3")
-    Call<ApiResponse> searchTracks(@Query("q") String searchQuery);
+    Call<ApiResponse> searchAPI(@Query("q") String searchQuery);
+
+
+    @GET("search?type=artist&market=FR&limit=4")
+    Call<ApiResponse> getArtists(@Query("q") Character searchQuery);
 
     @GET("me")
     Call<Profile> currentUser();
@@ -26,17 +30,16 @@ public interface SpotifyApiService {
     @GET("browse/new-releases?country=FR")
     Call<ApiResponseNewAlbums> getLatestAlbums();
 
-    @GET("me/playlists")
-    Call<ApiResponse> myPlaylists();
+
 
     @GET("browse/featured-playlists")
     Call<ApiResponse> getFeaturedLists();
-    //Call<List<Track>> searchTracks(@Query("q") String searchQuery, @Header("Authorization: Bearer") String accessToken);
+    @GET("me/playlists")
+    Call<ApiResponse> myPlaylists();
 
-    //@GET("?q={track}&type=track")
-    //Call<Track> getSongById(@Path("songId") String songId);
+    @GET("me/following?type=artist")
+    Call<ApiResponse> myFollowingArtist();
 
-    //@GET("songs/random/{number}")
-    //Call<List<Song>> randomSongs(@Path("number") int number);
-
+    @GET("me/albums")
+    Call<ApiResponse> mySavedAlbums();
 }
