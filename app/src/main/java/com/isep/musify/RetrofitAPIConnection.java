@@ -226,6 +226,33 @@ public class RetrofitAPIConnection {
         });
     }
 
+    public void currentPlayback(String AccessToken, CustomPlaybackCallback playbackCallback){
+        Retrofit retrofit = getRetrofitBuilder(AccessToken);
+
+        SpotifyApiService spotifyApiService = retrofit.create(SpotifyApiService.class);
+        Call<ApiResponse> call = spotifyApiService.getPlayback();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.code() == 200) {
+                    //Log.d("Musify", response.raw().toString());
+                    playbackCallback.onSuccess(response.body());
+                } else {
+                    try {
+                        Log.d("Musify", "Current Playback error " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("Musify Error", t.getMessage());
+            }
+        });
+    }
     public void currentUserApiRequest(String AccessToken, CustomCallbackProfile customCallbackSuccess) {
 
         Retrofit retrofit = getRetrofitBuilder(AccessToken);

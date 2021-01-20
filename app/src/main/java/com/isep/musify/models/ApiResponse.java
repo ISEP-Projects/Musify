@@ -14,16 +14,20 @@ public class ApiResponse {
     private AlbumsResponseObject albumsList;
     @SerializedName("items")
     private List<LibraryItem> libraryItems;
+    //Playback Response
+    @SerializedName("item")
+    private PlaybackResponseObject playbackResponse;
     @SerializedName("profile")
     private ProfileResponseObject profile;
     @SerializedName("playlists")
     private LatestList playlists;
 
-    public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList) {
+    public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList, List<LibraryItem> libraryItems, PlaybackResponseObject playbackResponse) {
         this.tracksList = tracksList;
         this.artistsList = artistsList;
         this.albumsList = albumsList;
         this.libraryItems = libraryItems;
+        this.playbackResponse = playbackResponse;
     }
     public ApiResponse(ProfileResponseObject profileName){
         this.profile=profileName;
@@ -33,13 +37,34 @@ public class ApiResponse {
     public TracksResponseObject getTracksList() {
         return tracksList;
     }
+
     public ArtistsResponseObject getArtistsList() {
         return artistsList;
     }
+
     public AlbumsResponseObject getAlbumsList() {
         return albumsList;
     }
-    public List<LibraryItem> getLibraryItems() { return libraryItems; }
+
+    public List<LibraryItem> getLibraryItems() {
+        return libraryItems;
+    }
+
     public LatestList getFeaturedList(){return playlists;}
 
+
+    @Override
+    public String toString() {
+        return "ApiResponse{" +
+                "tracksList=" + tracksList +
+                ", artistsList=" + artistsList +
+                ", albumsList=" + albumsList +
+                ", libraryItems=" + libraryItems +
+                ", playbackResponse=" + playbackResponse +
+                '}';
+    }
+
+    public PlaybackResponseObject getPlaybackResponse() {
+        return playbackResponse;
+    }
 }
