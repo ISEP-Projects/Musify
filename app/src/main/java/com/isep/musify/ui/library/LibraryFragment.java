@@ -51,6 +51,7 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
     private ItemsAdapter adapter;
     private ArtistsAdapter artistsAdapter;
     private PlaylistAdapter playlistAdapter;
+
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, artistsItems, albumsItems;
 
@@ -228,7 +229,7 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onTrackClick(View view, int position) {
         Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
 
     }

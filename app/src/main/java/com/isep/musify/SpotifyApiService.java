@@ -28,8 +28,6 @@ public interface SpotifyApiService {
     Call<ApiResponse> searchAPI(@Query("q") String searchQuery);
 
     @GET("search?type=artist&market=IN&limit=4")
-
-    @GET("search?type=artist&market=FR&limit=4")
     Call<ApiResponse> getArtists(@Query("q") Character searchQuery);
 
     @GET("me")

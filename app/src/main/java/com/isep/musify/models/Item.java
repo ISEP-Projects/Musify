@@ -151,10 +151,6 @@ public class Item implements Parcelable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getUri() {
         return uri;
     }

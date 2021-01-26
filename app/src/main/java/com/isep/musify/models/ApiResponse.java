@@ -52,6 +52,12 @@ public class ApiResponse {
 
     public LatestList getFeaturedList(){return playlists;}
 
+    public LatestList getPlaylists() {
+        return playlists;
+    }
+    public PlaybackResponseObject getPlaybackResponse() {
+        return playbackResponse;
+    }
 
     @Override
     public String toString() {
@@ -64,7 +70,5 @@ public class ApiResponse {
                 '}';
     }
 
-    public PlaybackResponseObject getPlaybackResponse() {
-        return playbackResponse;
-    }
+
 }
