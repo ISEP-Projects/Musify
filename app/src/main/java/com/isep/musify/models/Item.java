@@ -22,8 +22,9 @@ public class Item implements Parcelable {
     String followers;
     int index;  //Index of item in original list
 
-    //For Artsits/Albums
-    public Item(String id, String type, Image icon, Image cover, String name, String description, String href) {
+    //For Artists/Albums
+    public Item(int index, String id, String type, Image icon, Image cover, String name, String description, String href) {
+        this.index = index;
         this.id = id;
         this.type = type;
         this.icon = icon;
@@ -149,6 +150,10 @@ public class Item implements Parcelable {
             return new Item[size];
         }
     };
+
+    public int getIndex() {
+        return index;
+    }
 
     public String getId() {
         return id;

@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.isep.musify.ArtistActivity;
 import com.isep.musify.CustomCallbackSuccess;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
@@ -47,6 +48,7 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
 
     private List<Item> itemsList;
     private List<Track> tracksList;
+    private List<Artist> artistsList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
                 //Retrieve respective lists from object
                 tracksList = value.getTracksList().getTracks();
                 List<Album> albumsList = value.getAlbumsList().getAlbums();
-                List<Artist> artistsList = value.getArtistsList().getArtists();
+                artistsList = value.getArtistsList().getArtists();
 
 
                //Saving Tracks as Custom Items
@@ -117,7 +119,7 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
                     //Log.d("Musify", "Album by " + name + "\n" + tracksList.get(i).getArtists().get(0).toString());
                     List<Image> images = albumsList.get(i).getImages();
                     String href = albumsList.get(i).getHref();
-                    Item item = new Item(id, "Album", images.get(images.size()-1), images.get(0), name, description, href);
+                    Item item = new Item(i, id, "Album", images.get(images.size()-1), images.get(0), name, description, href);
                     //Log.d("Musify", "Album converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
@@ -129,7 +131,7 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
                     String description = "Artist ";
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
-                    Item item = new Item(id, "Artist", images.get(images.size()-1), images.get(0), name, description, href);
+                    Item item = new Item(i, id, "Artist", images.get(images.size()-1), images.get(0), name, description, href);
                     //Log.d("Musify", "Artist converted to item!\n" + item.toString());
                     itemsList.add(item);
                 }
@@ -179,6 +181,14 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
                 break;
 
             case "Artist":
+                int index = item.getIndex();
+                Intent intent = new Intent(getActivity(), ArtistActivity.class);
+                intent.putExtra("AccessToken", dataViewModel.getAccessToken());
+                intent.putExtra("ArtistId", artistsList.get(index).getId());
+                intent.putExtra("ArtistName", artistsList.get(index).getName());
+                intent.putExtra("Followers", String.valueOf(artistsList.get(index).getFollowrs().getTotal()));
+                intent.putExtra("imageHref",artistsList.get(index).getImages().get(artistsList.get(index).getImages().size()-1).getUrl());
+                startActivity(intent);
                 break;
 
             default:
