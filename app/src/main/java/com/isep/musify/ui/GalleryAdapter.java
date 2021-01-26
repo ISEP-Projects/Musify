@@ -52,7 +52,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     @Override
     public void onBindViewHolder(GalleryAdapter.MyViewHolder holder, int position) {
         holder.textView1.setText(dataList.get(position).getName());
-        Image image = dataList.get(position).getIcon();
+        Image image = dataList.get(position).getCover();
         Picasso.get()
                 .load(image.getUrl())
                 .into(holder.imageView);

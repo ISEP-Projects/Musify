@@ -141,6 +141,7 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
                     String href = artistsList.get(i).getHref();
                     String id = artistsList.get(i).getId();
                     //Item item = new Item(images.get(images.size()-1), name, followers, href, id);
+                    String description = "Artist";
                     Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     artistsItems.add(item);
                 }

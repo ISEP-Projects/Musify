@@ -73,6 +73,15 @@ public class Item implements Parcelable {
         this.icon = image;
     }
 
+    //For Album
+    public Item(Image cover, String name, String description, String href) {
+        this.cover = cover;
+        this.coverUrl = cover.getUrl();
+        this.name = name;
+        this.description = description;
+        this.href = href;
+    }
+
     protected Item(Parcel in) {
         id = in.readString();
         type = in.readString();
