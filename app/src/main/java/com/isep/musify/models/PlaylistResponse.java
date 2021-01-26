@@ -10,7 +10,7 @@ public class PlaylistResponse {
     private String id;
     private String name;
     @SerializedName("tracks")
-    private Playlists playlists;
+    private PlaylistItems playlistItems;
 
     public String getDescription() {
         return description;
@@ -32,16 +32,16 @@ public class PlaylistResponse {
         return name;
     }
 
-    public Playlists getPlaylists() {
-        return playlists;
+    public PlaylistItems getPlaylistItems() {
+        return playlistItems;
     }
 
-    public PlaylistResponse(String description, Follower followers, String href, String id, String name, Playlists playlists) {
+    public PlaylistResponse(String description, Follower followers, String href, String id, String name, PlaylistItems playlistItems) {
         this.description = description;
         this.followers = followers;
         this.href = href;
         this.id = id;
         this.name = name;
-        this.playlists = playlists;
+        this.playlistItems = playlistItems;
     }
 }
