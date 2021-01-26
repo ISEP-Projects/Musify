@@ -24,6 +24,7 @@ import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
+import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.models.Profile;
 import com.isep.musify.ui.DataViewModel;
 import com.squareup.picasso.Picasso;
@@ -161,6 +162,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 }
             }
 
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
+
+            }
 
 
             @Override

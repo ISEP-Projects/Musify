@@ -6,12 +6,32 @@ public class Item {
     String name;
     String description;
     String href;
+    String id;
+    String artistName;
+
+    public String getArtistName() {
+        return artistName;
+    }
 
     public Item(Image icon, String name, String description, String href) {
         this.icon = icon;
         this.name = name;
         this.description = description;
         this.href = href;
+    }
+
+    public Item(Image image, String name, String description, String href, String id) {
+        this.icon = image;
+        this.name = name;
+        this.description = description;
+        this.href = href;
+        this.id = id;
+    }
+
+    public Item(String name, String artistName, Image image) {
+        this.name = name;
+        this.artistName = artistName;
+        this.icon = image;
     }
 
     public Image getIcon() {
@@ -45,6 +65,8 @@ public class Item {
     public void setHref(String href) {
         this.href = href;
     }
+
+    public String getId() { return id; }
 
     @Override
     public String toString() {

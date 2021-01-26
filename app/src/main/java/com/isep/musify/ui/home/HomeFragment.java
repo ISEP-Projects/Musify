@@ -22,6 +22,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.isep.musify.CustomCallbackProfile;
 import com.isep.musify.CustomCallback_Album_Release;
 import com.isep.musify.R;
+import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.ui.DataViewModel;
 
 import com.isep.musify.CustomCallbackSuccess;
@@ -317,6 +318,10 @@ switch(flag) {
                 updateList(playlistsItems,0);
             }
 
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
+
+            }
 
 
             @Override
@@ -345,7 +350,10 @@ switch(flag) {
                 updateList(newPlaylists,3);
             }
 
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
 
+            }
 
 
             @Override

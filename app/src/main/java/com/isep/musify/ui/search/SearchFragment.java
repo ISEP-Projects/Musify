@@ -22,9 +22,12 @@ import com.isep.musify.models.Album;
 import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
+import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
-import com.isep.musify.models.Profile;
+
+import com.isep.musify.models.PlaylistResponse;
+
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.TracksAdapter;
@@ -133,7 +136,10 @@ public class SearchFragment extends Fragment implements TracksAdapter.TrackClick
             }
 
 
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
 
+            }
 
             @Override
             public void onFailure() {

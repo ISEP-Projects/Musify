@@ -1,11 +1,11 @@
 package com.isep.musify.ui.library;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,28 +16,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.isep.musify.CustomCallbackSuccess;
+import com.isep.musify.ArtistActivity;
+import com.isep.musify.CustomCallback;
+import com.isep.musify.PlaylistActivity;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.models.ApiResponse;
 import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
+import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
 import com.isep.musify.models.LibraryItem;
+
 import com.isep.musify.models.Profile;
+
+import com.isep.musify.models.PlaylistResponse;
+import com.isep.musify.ui.ArtistsAdapter;
+
 import com.isep.musify.ui.DataViewModel;
+import com.isep.musify.ui.PlaylistAdapter;
 import com.isep.musify.ui.TracksAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener {
+public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener,ArtistsAdapter.ArtistClickListener, PlaylistAdapter.PlaylistClickListener {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private RecyclerView recyclerView;
-    private TextView textView;
-    private TracksAdapter adapter;
+    private TracksAdapter tracksAdapter;
+    private ArtistsAdapter artistsAdapter;
+    private PlaylistAdapter playlistAdapter;
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, artistsItems, albumsItems;
 
@@ -59,9 +70,9 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                 Log.i("tab","onTabSelected:"+tab.getText());
                 CharSequence text = tab.getText();
                 if ("Playlists".equals(text)) {
-                    updateList(playlistsItems);
+                    updatePlaylist(playlistsItems);
                 } else if ("Artists".equals(text)) {
-                    updateList(artistsItems);
+                    updateArtistList(artistsItems);
                 } else if ("Albums".equals(text)) {
                     updateList(albumsItems);
                 }
@@ -79,19 +90,28 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
         apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
-                Log.d("library", "onSuccess response: " + value);
+                Log.d("library", "onSuccess response: " + value.getLibraryItems().size());
 
                 List<LibraryItem> playlists = value.getLibraryItems();
+                Log.d("playlists", playlists.toString());
 
                 for(int i = 0; i < playlists.size(); i++){
                     String name = playlists.get(i).getName();
                     String description = "by " + playlists.get(i).getOwner().getDisplay_name();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    String id = playlists.get(i).getId();
+                    Item item = new Item(images.get(images.size()-1), name, description, href, id);
                     playlistsItems.add(item);
                 }
-                updateList(playlistsItems);
+                Log.d("playlist",playlistsItems.toString());
+                updatePlaylist(playlistsItems);
+            }
+
+
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
+
             }
 
 
@@ -113,15 +133,19 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
 
                 for(int i = 0; i < artistsList.size(); i++){
                     String name = artistsList.get(i).getName();
-                    String description = "Artist ";
+                    String followers = artistsList.get(i).getFollowrs().getTotal();
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    String id = artistsList.get(i).getId();
+                    Item item = new Item(images.get(images.size()-1), name, followers, href, id);
                     artistsItems.add(item);
                 }
             }
 
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
 
+            }
 
             @Override
             public void onFailure() {
@@ -143,12 +167,16 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     String description = albumsList.get(i).getAddedAt();
                     List<Image> images = albumsList.get(i).getAlbum().getImages();
                     String href = albumsList.get(i).getAlbum().getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    String id = albumsList.get(i).getId();
+                    Item item = new Item(images.get(images.size()-1), name, description, href,id);
                     albumsItems.add(item);
                 }
             }
 
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
 
+            }
 
             @Override
             public void onFailure() {
@@ -161,10 +189,27 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     public void updateList(List<Item> list){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TracksAdapter(list);
-        adapter.setClickListener(this);
-        adapter.notifyDataSetChanged();
-        recyclerView.setAdapter(adapter);
+        tracksAdapter = new TracksAdapter(list);
+        tracksAdapter.setClickListener(this);
+        tracksAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(tracksAdapter);
+    }
+
+    public void updatePlaylist(List<Item> list){
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        playlistAdapter = new PlaylistAdapter(list);
+        playlistAdapter.setClickListener(this::onPlaylistClick);
+        playlistAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(playlistAdapter);
+    }
+    public void updateArtistList(List<Item> list){
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        artistsAdapter = new ArtistsAdapter(list);
+        artistsAdapter.setClickListener(this::onArtistClick);
+        artistsAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(artistsAdapter);
     }
 
     public void initialData(){
@@ -179,5 +224,27 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     @Override
     public void onTrackClick(View view, int position) {
         Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
+
+    }
+    @Override
+    public void onPlaylistClick(View view, int position) {
+        Intent i = new Intent(getActivity(), PlaylistActivity.class);
+        i.putExtra("AccessToken", dataViewModel.getAccessToken());
+        i.putExtra("PlaylistId", playlistsItems.get(position).getId());
+        i.putExtra("playlistName", playlistsItems.get(position).getName());
+        i.putExtra("playlistDescription", playlistsItems.get(position).getDescription());
+        i.putExtra("imageHref",playlistsItems.get(position).getIcon().getUrl());
+        Log.d("musify",playlistsItems.get(position).getId());
+        startActivity(i);
+    }
+    @Override
+    public void onArtistClick(View view, int position) {
+        Intent i = new Intent(getActivity(), ArtistActivity.class);
+        i.putExtra("AccessToken", dataViewModel.getAccessToken());
+        i.putExtra("ArtistId", artistsItems.get(position).getId());
+        i.putExtra("ArtistName", artistsItems.get(position).getName());
+        i.putExtra("Followers", artistsItems.get(position).getDescription());
+        i.putExtra("imageHref",artistsItems.get(position).getIcon().getUrl());
+        startActivity(i);
     }
 }

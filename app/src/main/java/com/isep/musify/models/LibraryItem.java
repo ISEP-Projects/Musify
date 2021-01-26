@@ -70,4 +70,11 @@ public class LibraryItem {
         this.addedAt = addedAt;
         this.album = album;
     }
+    public LibraryItem(String id, List<Image> images, String name, String description,  String href) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.images = images;
+        this.href = href;
+    }
 }
