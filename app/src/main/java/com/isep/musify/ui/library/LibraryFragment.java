@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,19 +37,21 @@ import com.isep.musify.ui.ArtistsAdapter;
 
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.PlaylistAdapter;
-import com.isep.musify.ui.TracksAdapter;
+import com.isep.musify.ui.ItemsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class LibraryFragment extends Fragment implements TracksAdapter.TrackClickListener,ArtistsAdapter.ArtistClickListener, PlaylistAdapter.PlaylistClickListener {
+public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickListener,ArtistsAdapter.ArtistClickListener, PlaylistAdapter.PlaylistClickListener {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private RecyclerView recyclerView;
-    private TracksAdapter tracksAdapter;
+    private TextView textView;
+    private ItemsAdapter adapter;
     private ArtistsAdapter artistsAdapter;
     private PlaylistAdapter playlistAdapter;
+
     private DataViewModel dataViewModel;
     private List<Item> playlistsItems, artistsItems, albumsItems;
 
@@ -101,7 +104,8 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
                     String id = playlists.get(i).getId();
-                    Item item = new Item(images.get(images.size()-1), name, description, href, id);
+                    //Item item = new Item(images.get(images.size()-1), name, description, href, id);
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     playlistsItems.add(item);
                 }
                 Log.d("playlist",playlistsItems.toString());
@@ -137,7 +141,9 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
                     String id = artistsList.get(i).getId();
-                    Item item = new Item(images.get(images.size()-1), name, followers, href, id);
+                    //Item item = new Item(images.get(images.size()-1), name, followers, href, id);
+                    String description = "Artist";
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     artistsItems.add(item);
                 }
             }
@@ -167,8 +173,9 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
                     String description = albumsList.get(i).getAddedAt();
                     List<Image> images = albumsList.get(i).getAlbum().getImages();
                     String href = albumsList.get(i).getAlbum().getHref();
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     String id = albumsList.get(i).getId();
-                    Item item = new Item(images.get(images.size()-1), name, description, href,id);
+                    //Item item = new Item(images.get(images.size()-1), name, description, href,id);
                     albumsItems.add(item);
                 }
             }
@@ -189,10 +196,10 @@ public class LibraryFragment extends Fragment implements TracksAdapter.TrackClic
     public void updateList(List<Item> list){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        tracksAdapter = new TracksAdapter(list);
-        tracksAdapter.setClickListener(this);
-        tracksAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(tracksAdapter);
+        adapter = new ItemsAdapter(list);
+        adapter.setClickListener(this);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
     }
 
     public void updatePlaylist(List<Item> list){
