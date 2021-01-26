@@ -16,6 +16,10 @@ public class Item implements Parcelable {
     String href;
     String uri;
     String artistName;
+    String playlistId;
+    String artistId;
+    String albumId;
+    String followers;
     int index;  //Index of item in original list
 
     //For Artsits/Albums
@@ -46,8 +50,35 @@ public class Item implements Parcelable {
         this.coverUrl = cover.getUrl();
     }
 
-    //For Library Items
-    public Item(Image icon, Image cover, String name, String description, String href) {
+    //For Playlist Library Item
+    public Item(Image icon, Image cover, String name, String description, String href, String playlistId) {
+        this.icon = icon;
+        this.cover = cover;
+        this.name = name;
+        this.description = description;
+        this.href = href;
+        this.iconUrl = icon.getUrl();
+        this.coverUrl = cover.getUrl();
+        this.playlistId = playlistId;
+    }
+
+    //Item item = new Item(images.get(images.size()-1), images.get(0), name, description, followers, href, artistId);
+    //For Playlist Library Item
+    public Item(Image icon, Image cover, String name, String description, String followers, String href, String artistId) {
+        this.icon = icon;
+        this.cover = cover;
+        this.name = name;
+        this.description = description;
+        this.followers = followers;
+        this.href = href;
+        this.artistId = artistId;
+        this.iconUrl = icon.getUrl();
+        this.coverUrl = cover.getUrl();
+    }
+
+    //For Playlist Album Item
+    public Item(String albumId, Image icon, Image cover, String name, String description, String href) {
+        this.albumId = albumId;
         this.icon = icon;
         this.cover = cover;
         this.name = name;
@@ -66,7 +97,7 @@ public class Item implements Parcelable {
         this.uri = uri;
     }
 
-    //For Artist?
+    //For Playlist Items
     public Item(String name, String artistName, Image image) {
         this.name = name;
         this.artistName = artistName;
@@ -161,6 +192,22 @@ public class Item implements Parcelable {
 
     public String getIconUrl() {
         return iconUrl;
+    }
+
+    public String getPlaylistId() {
+        return playlistId;
+    }
+
+    public String getArtistId() {
+        return artistId;
+    }
+
+    public String getAlbumId() {
+        return albumId;
+    }
+
+    public String getFollowers() {
+        return followers;
     }
 
     public String getCoverUrl() {

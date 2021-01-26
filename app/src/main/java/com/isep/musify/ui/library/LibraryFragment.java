@@ -103,9 +103,9 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
                     String description = "by " + playlists.get(i).getOwner().getDisplay_name();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    String id = playlists.get(i).getId();
+                    String playlistId = playlists.get(i).getId();
                     //Item item = new Item(images.get(images.size()-1), name, description, href, id);
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href, playlistId);
                     playlistsItems.add(item);
                 }
                 Log.d("playlist",playlistsItems.toString());
@@ -140,10 +140,10 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
                     String followers = artistsList.get(i).getFollowrs().getTotal();
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
-                    String id = artistsList.get(i).getId();
+                    String artistId = artistsList.get(i).getId();
                     //Item item = new Item(images.get(images.size()-1), name, followers, href, id);
                     String description = "Artist";
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
+                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, followers, href, artistId);
                     artistsItems.add(item);
                 }
             }
@@ -173,9 +173,8 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
                     String description = albumsList.get(i).getAddedAt();
                     List<Image> images = albumsList.get(i).getAlbum().getImages();
                     String href = albumsList.get(i).getAlbum().getHref();
-                    Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
-                    String id = albumsList.get(i).getId();
-                    //Item item = new Item(images.get(images.size()-1), name, description, href,id);
+                    String albumId = albumsList.get(i).getId();
+                    Item item = new Item(albumId, images.get(images.size()-1), images.get(0), name, description, href);
                     albumsItems.add(item);
                 }
             }
@@ -233,11 +232,11 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
     public void onPlaylistClick(View view, int position) {
         Intent i = new Intent(getActivity(), PlaylistActivity.class);
         i.putExtra("AccessToken", dataViewModel.getAccessToken());
-        i.putExtra("PlaylistId", playlistsItems.get(position).getId());
+        i.putExtra("PlaylistId", playlistsItems.get(position).getPlaylistId());
         i.putExtra("playlistName", playlistsItems.get(position).getName());
         i.putExtra("playlistDescription", playlistsItems.get(position).getDescription());
         i.putExtra("imageHref",playlistsItems.get(position).getIcon().getUrl());
-        Log.d("musify",playlistsItems.get(position).getId());
+        //Log.d("Musify",playlistsItems.get(position).getId());
         startActivity(i);
     }
     @Override
@@ -246,13 +245,14 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
         i.putExtra("AccessToken", dataViewModel.getAccessToken());
         i.putExtra("ArtistId", artistsItems.get(position).getId());
         i.putExtra("ArtistName", artistsItems.get(position).getName());
-        i.putExtra("Followers", artistsItems.get(position).getDescription());
+        i.putExtra("Followers", artistsItems.get(position).getFollowers());
         i.putExtra("imageHref",artistsItems.get(position).getIcon().getUrl());
         startActivity(i);
     }
 
     @Override
     public void onItemClick(View view, int position) {
+        Log.d("Musify", "Clicked on " + playlistsItems.get(position).getName());
         Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
     }
 }

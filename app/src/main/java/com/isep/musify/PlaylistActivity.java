@@ -19,6 +19,7 @@ import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
 import com.isep.musify.models.PlaylistResponse;
 import com.isep.musify.models.SongItem;
+import com.isep.musify.models.Track;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.SongAdapter;
 import com.squareup.picasso.Picasso;
@@ -31,6 +32,7 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
     private String accessToken, playlistId, imageHref, playlisyName;
     private DataViewModel dataViewModel;
     private List<Item> songslistItems;
+    private List<Track> tracksList;
     private ImageView image;
     private Button playButton;
     private TextView nameView, followersView;
@@ -52,7 +54,6 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
         accessToken = getIntent().getStringExtra("AccessToken");
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
         dataViewModel.setAccessToken(accessToken);
-        //Log.d("Musify", "Access Token received in Main Activity: " + accessToken);
         songslistItems = new ArrayList<>();
         playlistId = getIntent().getStringExtra("PlaylistId");
         imageHref = getIntent().getStringExtra("imageHref");
@@ -63,31 +64,31 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
         nameView.setText(playlisyName);
         playlistSpotifyAPI();
 
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("Musify", "Play playlist");
             }
         });
     }
 
     public void playlistSpotifyAPI() {
+        Log.d("Musify", "Fetching data of Playlist" + playlistId );
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
         apiConnection.myPlaylistApiRequest(dataViewModel.getAccessToken(), playlistId, new CustomCallback() {
             @Override
             public void onSuccess(ApiResponse value) {
-
+                Log.d("Musify", "onSuccess");
             }
 
             @Override
             public void onSuccessForPlaylist(PlaylistResponse value) {
-                Log.d("library", "onSuccess response: " + value);
+                Log.d("Musify", "onSuccess response: " + value);
 
                 List<SongItem> songslist = value.getPlaylists().getSongList();
                 followers = value.getFollower().getTotal();
                 followersView.setText("Followers: " + followers);
-                Log.d("songslist", value.getFollower().getTotal());
+                Log.d("Musify", value.getFollower().getTotal());
 
                 for(int i = 0; i < songslist.size(); i++){
                     String name = songslist.get(i).getSong().getName();
@@ -96,7 +97,7 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
                     Item item = new Item(name, artistName, images.get(images.size()-1));
                     songslistItems.add(item);
                 }
-                Log.d("songslist",songslistItems.toString());
+                Log.d("Musify", songslistItems.toString());
                 updateSonglist(songslistItems);
             }
 
@@ -107,12 +108,14 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
 
             @Override
             public void onFailure() {
+                Log.d("Musify", "Error fetching tracks");
                 Toast.makeText(getApplicationContext(), "Error fetching tracks", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     public void updateSonglist(List<Item> list){
+        Log.d("Musify", "Items List " + String.valueOf(list.size()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songAdapter = new SongAdapter(list);
@@ -122,6 +125,7 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
 
     @Override
     public void onClick(View view, int position) {
+        Log.d("Musify", "Clicked on " + position);
 
     }
 }
