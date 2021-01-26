@@ -228,11 +228,7 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
         albumsSpotifyAPI();
     }
 
-    @Override
-    public void onTrackClick(View view, int position) {
-        Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
 
-    }
     @Override
     public void onPlaylistClick(View view, int position) {
         Intent i = new Intent(getActivity(), PlaylistActivity.class);
@@ -253,5 +249,10 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
         i.putExtra("Followers", artistsItems.get(position).getDescription());
         i.putExtra("imageHref",artistsItems.get(position).getIcon().getUrl());
         startActivity(i);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
     }
 }
