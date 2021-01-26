@@ -16,6 +16,11 @@ public class Item implements Parcelable {
     String href;
     String uri;
     int index;  //Index of item in original list
+    String artistName;
+
+    public String getArtistName() {
+        return artistName;
+    }
 
     //For Artsits/Albums
     public Item(String id, String type, Image icon, Image cover, String name, String description, String href) {
@@ -110,6 +115,20 @@ public class Item implements Parcelable {
         return type;
     }
 
+    public Item(Image image, String name, String description, String href, String id) {
+        this.icon = image;
+        this.name = name;
+        this.description = description;
+        this.href = href;
+        this.id = id;
+    }
+
+    public Item(String name, String artistName, Image image) {
+        this.name = name;
+        this.artistName = artistName;
+        this.icon = image;
+    }
+
     public Image getIcon() {
         return icon;
     }
@@ -145,7 +164,6 @@ public class Item implements Parcelable {
     public String getCoverUrl() {
         return coverUrl;
     }
-
 
 
     @Override

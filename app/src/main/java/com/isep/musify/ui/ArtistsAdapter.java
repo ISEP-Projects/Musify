@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.isep.musify.R;
@@ -22,50 +23,47 @@ import java.util.List;
     https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
  */
 
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder> {
+public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.MyViewHolder> {
 
     private List<Item> dataList;
-    private static ItemClickListener itemClickListener;
+    private static ArtistClickListener itemClickListener;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView textView1, textView2;
+        public TextView textView;
         public ImageView imageView;
         public MyViewHolder(View v) {
             super(v);
-            textView1 = v.findViewById(R.id.Name);
-            textView2 = v.findViewById(R.id.trackDescription);
-            imageView = v.findViewById(R.id.Icon);
+            textView = v.findViewById(R.id.artistName);
+            imageView = v.findViewById(R.id.artistIcon);
             v.setOnClickListener(this);
         }
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
+            if (itemClickListener != null) itemClickListener.onArtistClick(view, getAdapterPosition());
         }
     }
 
-    public ItemsAdapter(List<Item> myDataset) {
+    public ArtistsAdapter(List<Item> myDataset) {
         dataList = myDataset;
     }
 
     @Override
-    public ItemsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ArtistsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listTrack= layoutInflater.inflate(R.layout.custom_track_view, parent, false);
+        View listTrack= layoutInflater.inflate(R.layout.custom_artist_view, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(listTrack);
         return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.textView1.setText(dataList.get(position).getName());
-        holder.textView2.setText(dataList.get(position).getDescription());
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.textView.setText(dataList.get(position).getName());
         Image image = dataList.get(position).getIcon();
         Picasso.get()
                 .load(image.getUrl())
                 .into(holder.imageView);
-
     }
 
     @Override
@@ -78,15 +76,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
     }
 
 
-    public void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ArtistClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     Item getItem(int id) {
-            return dataList.get(id);
+        return dataList.get(id);
     }
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
+    public interface ArtistClickListener {
+        void onArtistClick(View view, int position);
     }
 }

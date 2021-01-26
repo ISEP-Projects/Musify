@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.isep.musify.R;
@@ -15,17 +16,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/*
-    REFERENCES:
-    https://developer.android.com/guide/topics/ui/layout/recyclerview
-    https://www.javatpoint.com/android-recyclerview-list-example
-    https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
- */
-
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder> {
+public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyViewHolder> {
 
     private List<Item> dataList;
-    private static ItemClickListener itemClickListener;
+    private static PlaylistClickListener itemClickListener;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView textView1, textView2;
@@ -39,16 +33,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         }
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
+            if (itemClickListener != null) itemClickListener.onPlaylistClick(view, getAdapterPosition());
         }
     }
 
-    public ItemsAdapter(List<Item> myDataset) {
+    public PlaylistAdapter(List<Item> myDataset) {
         dataList = myDataset;
     }
 
     @Override
-    public ItemsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PlaylistAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listTrack= layoutInflater.inflate(R.layout.custom_track_view, parent, false);
@@ -58,14 +52,13 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView1.setText(dataList.get(position).getName());
         holder.textView2.setText(dataList.get(position).getDescription());
         Image image = dataList.get(position).getIcon();
         Picasso.get()
                 .load(image.getUrl())
                 .into(holder.imageView);
-
     }
 
     @Override
@@ -78,15 +71,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
     }
 
 
-    public void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(PlaylistClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     Item getItem(int id) {
-            return dataList.get(id);
+        return dataList.get(id);
     }
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
+    public interface PlaylistClickListener {
+        void onPlaylistClick(View view, int position);
     }
 }

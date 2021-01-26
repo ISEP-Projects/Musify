@@ -14,58 +14,48 @@ import com.isep.musify.models.Item;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-/*
-    REFERENCES:
-    https://developer.android.com/guide/topics/ui/layout/recyclerview
-    https://www.javatpoint.com/android-recyclerview-list-example
-    https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
- */
-
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder> {
+//reference:
+//https://www.11zon.com/zon/android/horizontal-recyclerview-with-cardview-android.php
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
 
     private List<Item> dataList;
-    private static ItemClickListener itemClickListener;
-
+    private static GalleryAdapter.GalleryClickListener itemClickListener;
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView textView1, textView2;
+        public TextView textView1;
         public ImageView imageView;
         public MyViewHolder(View v) {
             super(v);
             textView1 = v.findViewById(R.id.Name);
-            textView2 = v.findViewById(R.id.trackDescription);
             imageView = v.findViewById(R.id.Icon);
             v.setOnClickListener(this);
         }
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
+            if (itemClickListener != null) itemClickListener.onGalleryClick(view, getAdapterPosition());
         }
     }
 
-    public ItemsAdapter(List<Item> myDataset) {
+    public GalleryAdapter(List<Item> myDataset) {
         dataList = myDataset;
     }
 
     @Override
-    public ItemsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GalleryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listTrack= layoutInflater.inflate(R.layout.custom_track_view, parent, false);
+        View listTrack= layoutInflater.inflate(R.layout.card_album_view, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(listTrack);
         return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(GalleryAdapter.MyViewHolder holder, int position) {
         holder.textView1.setText(dataList.get(position).getName());
-        holder.textView2.setText(dataList.get(position).getDescription());
         Image image = dataList.get(position).getIcon();
         Picasso.get()
                 .load(image.getUrl())
                 .into(holder.imageView);
-
     }
 
     @Override
@@ -77,16 +67,17 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         }
     }
 
-
-    public void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(GalleryAdapter.GalleryClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     Item getItem(int id) {
-            return dataList.get(id);
+        return dataList.get(id);
     }
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
+    public interface GalleryClickListener {
+        void onGalleryClick(View view, int position);
     }
+
+
 }

@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
@@ -55,4 +55,10 @@ dependencies {
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Circular ImageVIew
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
+    //default Profile image
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }

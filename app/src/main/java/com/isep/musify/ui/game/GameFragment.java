@@ -17,19 +17,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.isep.musify.CustomCallback;
+import com.isep.musify.CustomCallbackSuccess;
 import com.isep.musify.MainActivity;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
-import com.isep.musify.models.Item;
+import com.isep.musify.models.ArtistTrackResponse;
+import com.isep.musify.models.Profile;
 import com.isep.musify.ui.DataViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -48,7 +48,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     private int counterValue = 10, scoreValue = 0;
     private int popularityLeft, popularityRight;    //Save artist's popularity to compare
-
     AlertDialog.Builder builder;
 
 
@@ -138,7 +137,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         //char c = (char) (rnd.nextInt(26) + 'a');
         Log.d("Musify", "Request random artist search with char = " + c);
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.getRandomArtists(accessToken, c, new CustomCallback() {
+        apiConnection.getRandomArtists(accessToken, c, new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
 
@@ -162,6 +161,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     loadArtists();
                 }
             }
+
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
+
+            }
+
 
             @Override
             public void onFailure() {

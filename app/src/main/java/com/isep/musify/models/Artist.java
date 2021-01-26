@@ -10,6 +10,11 @@ public class Artist {
     private String type;
     private String uri;
     private int popularity;
+    private Follower followers;
+
+    public Follower getFollowrs() {
+        return followers;
+    }
 
     public String getHref() {
         return href;

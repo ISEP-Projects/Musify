@@ -17,6 +17,11 @@ public class ApiResponse {
     //Playback Response
     @SerializedName("item")
     private PlaybackResponseObject playbackResponse;
+    @SerializedName("profile")
+    private ProfileResponseObject profile;
+    @SerializedName("playlists")
+    private LatestList playlists;
+
 
     public ApiResponse(TracksResponseObject tracksList, ArtistsResponseObject artistsList, AlbumsResponseObject albumsList, List<LibraryItem> libraryItems, PlaybackResponseObject playbackResponse) {
         this.tracksList = tracksList;
@@ -25,35 +30,21 @@ public class ApiResponse {
         this.libraryItems = libraryItems;
         this.playbackResponse = playbackResponse;
     }
-
+    public ApiResponse(ProfileResponseObject profileName){
+        this.profile=profileName;
+    }
+    //public ApiResponse(LatestList lists){this.playlists=  lists;}
+    public ProfileResponseObject getProfile(){return profile;}
     public TracksResponseObject getTracksList() {
         return tracksList;
     }
-
     public ArtistsResponseObject getArtistsList() {
         return artistsList;
     }
-
     public AlbumsResponseObject getAlbumsList() {
         return albumsList;
     }
+    public List<LibraryItem> getLibraryItems() { return libraryItems; }
+    public LatestList getFeaturedList(){return playlists;}
 
-    public List<LibraryItem> getLibraryItems() {
-        return libraryItems;
-    }
-
-    @Override
-    public String toString() {
-        return "ApiResponse{" +
-                "tracksList=" + tracksList +
-                ", artistsList=" + artistsList +
-                ", albumsList=" + albumsList +
-                ", libraryItems=" + libraryItems +
-                ", playbackResponse=" + playbackResponse +
-                '}';
-    }
-
-    public PlaybackResponseObject getPlaybackResponse() {
-        return playbackResponse;
-    }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,16 +18,20 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.isep.musify.CustomCallback;
-import com.isep.musify.MainActivity;
+import com.isep.musify.CustomCallbackSuccess;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
 import com.isep.musify.TrackDetails;
 import com.isep.musify.models.Album;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
+import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
+
+import com.isep.musify.models.PlaylistResponse;
+
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.ItemsAdapter;
@@ -82,7 +87,7 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
 
     public void searchSpotifyAPI(String input) {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.searchApiRequest(dataViewModel.getAccessToken(), input, new CustomCallback() {
+        apiConnection.searchApiRequest(dataViewModel.getAccessToken(), input, new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 //Saving objects of different types into a unified list to display in Recyclerview
@@ -135,6 +140,12 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
                 }
 
                 updateTracksList(itemsList);
+            }
+
+
+            @Override
+            public void onSuccessForArtist(ArtistTrackResponse value) {
+
             }
 
             @Override
