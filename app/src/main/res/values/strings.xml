@@ -20,7 +20,7 @@
 
     <!-- Library -->
     <string name="play_button">Play</string>
-    <string name="title_activity_playlist">Playlisy</string>
+    <string name="title_activity_playlist">Playlist</string>
     <string name="title_activity_artist">Artist</string>
 
 </resources>
