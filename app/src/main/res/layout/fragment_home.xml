@@ -33,26 +33,25 @@
                 android:layout_marginTop="42dp"
                 android:layout_marginEnd="291dp"
                 android:paddingLeft="18dp"
-                android:textSize="16sp"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="24sp" />
 
         </TableRow>
 
 
-
-    <TextView
-        android:id="@+id/madeforYou"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Made for you By YOU"
-        android:layout_marginTop="25dp"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/profileName"
-        />
+        <TextView
+            android:id="@+id/madeforYou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Made for you By YOU"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@+id/profileName" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RV_playlist"
             android:layout_width="wrap_content"
@@ -72,9 +71,10 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Newly released Albums"
             android:layout_marginTop="25dp"
-            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:text="Newly released Albums"
+            android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="18sp" />
 
@@ -92,9 +92,10 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Featured Playlists"
             android:layout_marginTop="25dp"
-            android:textAlignment="center"
+            android:layout_marginLeft="10dp"
+            android:text="Featured Playlists"
+            android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="18sp" />
 
@@ -102,10 +103,7 @@
             android:id="@+id/FeaturedLists"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             />
-
-
 
     </TableLayout>
 </ScrollView>
