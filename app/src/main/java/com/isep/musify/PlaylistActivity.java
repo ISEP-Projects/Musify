@@ -23,13 +23,22 @@ import com.isep.musify.models.Track;
 import com.isep.musify.models.TrackItem;
 import com.isep.musify.ui.DataViewModel;
 import com.isep.musify.ui.SongAdapter;
+import com.spotify.android.appremote.api.ConnectionParams;
+import com.spotify.android.appremote.api.Connector;
+import com.spotify.android.appremote.api.SpotifyAppRemote;
+import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp;
+import com.spotify.android.appremote.api.error.NotLoggedInException;
+import com.spotify.android.appremote.api.error.UserNotAuthorizedException;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistActivity extends AppCompatActivity implements SongAdapter.SongClickListener {
-
+    Credentials credentials = new Credentials();
+    private final String CLIENT_ID = credentials.getClientID();
+    private final String REDIRECT_URI = credentials.getRedirectURI();
+    private SpotifyAppRemote mSpotifyAppRemote;
     private String accessToken, playlistId, imageHref, playlisyName;
     private DataViewModel dataViewModel;
     private List<Item> itemsList;
@@ -69,8 +78,37 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
             @Override
             public void onClick(View v) {
                 Log.d("Musify", "Play playlist");
+                mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:" + playlistId);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ConnectionParams connectionParams =
+                new ConnectionParams.Builder(CLIENT_ID)
+                        .setRedirectUri(REDIRECT_URI)
+                        .showAuthView(true)
+                        .build();
+
+        SpotifyAppRemote.connect(this, connectionParams,
+                new Connector.ConnectionListener() {
+
+                    public void onConnected(SpotifyAppRemote spotifyAppRemote) {
+                        mSpotifyAppRemote = spotifyAppRemote;
+                        Log.d("Musify", "Connected! Yay!");
+                    }
+
+                    public void onFailure(Throwable error) {
+                        Log.e("Musify", error.getMessage(), error);
+                        if (error instanceof NotLoggedInException || error instanceof UserNotAuthorizedException) {
+                            // Redirect to Login Activity
+                        } else if (error instanceof CouldNotFindSpotifyApp) {
+                            Toast.makeText(getApplicationContext(), "Please download Spotify App for Playback", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     public void playlistSpotifyAPI() {
