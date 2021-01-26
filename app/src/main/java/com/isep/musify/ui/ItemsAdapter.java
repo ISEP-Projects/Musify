@@ -22,10 +22,10 @@ import java.util.List;
     https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
  */
 
-public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.MyViewHolder> {
+public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder> {
 
     private List<Item> dataList;
-    private static TrackClickListener itemClickListener;
+    private static ItemClickListener itemClickListener;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView textView1, textView2;
@@ -39,16 +39,16 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.MyViewHold
         }
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onTrackClick(view, getAdapterPosition());
+            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
-    public TracksAdapter(List<Item> myDataset) {
+    public ItemsAdapter(List<Item> myDataset) {
         dataList = myDataset;
     }
 
     @Override
-    public TracksAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listTrack= layoutInflater.inflate(R.layout.custom_track_view, parent, false);
@@ -78,7 +78,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.MyViewHold
     }
 
 
-    public void setClickListener(TrackClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
@@ -86,7 +86,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.MyViewHold
             return dataList.get(id);
     }
 
-    public interface TrackClickListener {
-        void onTrackClick(View view, int position);
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

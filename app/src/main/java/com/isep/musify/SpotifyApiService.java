@@ -24,11 +24,10 @@ import retrofit2.http.Query;
 //Single<JsonElement> getMovieList(@Query("movie_lang") String userLanguage);
 
 public interface SpotifyApiService {
-    @GET("search?type=track%2Cartist%2Calbum&market=FR&limit=3")
+    @GET("search?type=track%2Cartist%2Calbum&market=IN&limit=3")
     Call<ApiResponse> searchAPI(@Query("q") String searchQuery);
 
-
-    @GET("search?type=artist&market=FR&limit=4")
+    @GET("search?type=artist&market=IN&limit=4")
     Call<ApiResponse> getArtists(@Query("q") Character searchQuery);
 
     @GET("me")
@@ -53,4 +52,7 @@ public interface SpotifyApiService {
 
     @GET("me/albums")
     Call<ApiResponse> mySavedAlbums();
+
+    @GET("me/player?market=IN")
+    Call<ApiResponse> getPlayback();
 }
