@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.isep.musify.CustomCallbackProfile;
 import com.isep.musify.CustomCallback_Album_Release;
+import com.isep.musify.CustomListAdapter;
 import com.isep.musify.PlaylistActivity;
 import com.isep.musify.R;
 import com.isep.musify.models.ArtistTrackResponse;
@@ -37,7 +38,7 @@ import com.isep.musify.models.LibraryItem;
 import com.isep.musify.models.NewReleases;
 import com.isep.musify.models.Profile;
 import com.isep.musify.models.SimplePlaylist;
-import com.isep.musify.ui.GalleryAdapter;
+import com.isep.musify.ui.LatestListAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClickListener {
+public class HomeFragment extends Fragment implements LatestListAdapter.GalleryClickListener, CustomListAdapter.CustomListClickListner {
     TextView profile;
     ImageView imageView;
     private HomeViewModel homeViewModel;
@@ -54,7 +55,8 @@ public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClic
     private List<Item> playlistsItems, newPlaylists, newAlbums;
     private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums, recyclerView_Featured_Playlist;
     //private TracksAdapter tracksAdapter;
-    private GalleryAdapter galleryAdapter, tracksAdapter;
+    private LatestListAdapter latestListAdapter;
+    private CustomListAdapter tracksAdapter;
     private Timer timer;
     private TimerTask timerTask;
     private int position;
@@ -204,8 +206,8 @@ public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClic
         layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_Made_For_You.setHasFixedSize(true);
         recyclerView_Made_For_You.setLayoutManager(layoutManager);
-        tracksAdapter = new GalleryAdapter(list);
-        tracksAdapter.setClickListener(this::onGalleryClick);
+        tracksAdapter = new CustomListAdapter(list);
+        tracksAdapter.setClickListener(this::onCustomListClick);
         tracksAdapter.notifyDataSetChanged();
         recyclerView_Made_For_You.setAdapter(tracksAdapter);
         recyclerView_Made_For_You.setOnClickListener(new View.OnClickListener() {
@@ -236,7 +238,7 @@ public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClic
         layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_newAlbums.setHasFixedSize(true);
         recyclerView_newAlbums.setLayoutManager(layoutManager);
-        tracksAdapter = new GalleryAdapter(list);
+        tracksAdapter = new CustomListAdapter(list);
         tracksAdapter.notifyDataSetChanged();
         recyclerView_newAlbums.setAdapter(tracksAdapter);
 
@@ -269,10 +271,10 @@ public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClic
         layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_Featured_Playlist.setHasFixedSize(true);
         recyclerView_Featured_Playlist.setLayoutManager(layoutManager);
-        galleryAdapter = new GalleryAdapter(list);
-        galleryAdapter.setClickListener(this::onGalleryClick);
-        galleryAdapter.notifyDataSetChanged();
-        recyclerView_Featured_Playlist.setAdapter(galleryAdapter);
+        latestListAdapter = new LatestListAdapter(list);
+        latestListAdapter.setClickListener(this::onGalleryClick);
+        latestListAdapter.notifyDataSetChanged();
+        recyclerView_Featured_Playlist.setAdapter(latestListAdapter);
 
         recyclerView_Featured_Playlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,9 +317,9 @@ public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClic
                     String href = playlists.get(i).getHref();
                     String playlistId = playlists.get(i).getId();
                     Item item = new Item(images.get(images.size() - 1), name, description, href,playlistId);
-                    newPlaylists.add(item);
+                    playlistsItems.add(item);
                 }
-                updateMadeforYouList(newPlaylists);
+                updateMadeforYouList(playlistsItems);
             }
 
             @Override
@@ -416,6 +418,16 @@ public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClic
     }
 
 
+    @Override
+    public void onCustomListClick(View view, int position) {
+        Intent i = new Intent(getActivity(), PlaylistActivity.class);
+        i.putExtra("AccessToken", dataViewModel.getAccessToken());
+        i.putExtra("PlaylistId", playlistsItems.get(position).getPlaylistId());
+        i.putExtra("playlistName", playlistsItems.get(position).getName());
+        i.putExtra("playlistDescription", playlistsItems.get(position).getDescription());
+        i.putExtra("imageHref",playlistsItems.get(position).getCoverUrl());
+        startActivity(i);
+    }
 }
 
 
