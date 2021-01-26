@@ -1,5 +1,6 @@
 package com.isep.musify.ui.home;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.isep.musify.CustomCallbackProfile;
 import com.isep.musify.CustomCallback_Album_Release;
 import com.isep.musify.R;
@@ -128,11 +130,17 @@ public class HomeFragment extends Fragment {
                 List<Image> image = value.getImages();
                 imageView.setClipToOutline(true);
 
-
-                Picasso.get()
-                        .load(image.get(0).getUrl())
-                        .into(imageView);
-
+try {
+    Picasso.get()
+            .load(image.get(0).getUrl())
+            .into(imageView);
+}catch(Exception e){
+    //If no profile image
+    Log.d("No progile image", e.getMessage());
+    TextDrawable drawable = TextDrawable.builder()
+            .buildRect(String.valueOf(value.getDisplay_name().charAt(0)), Color.RED);
+    imageView.setImageDrawable(drawable);
+}
            Log.d("Profile value = ",""+value);
            // textView.setText((CharSequence) value.getProfile().getName());
             }

@@ -57,4 +57,7 @@ dependencies {
 
     //Circular ImageVIew
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
+    //default Profile image
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }
