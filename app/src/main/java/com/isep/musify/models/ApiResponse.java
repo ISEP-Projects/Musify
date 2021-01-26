@@ -47,4 +47,11 @@ public class ApiResponse {
     public List<LibraryItem> getLibraryItems() { return libraryItems; }
     public LatestList getFeaturedList(){return playlists;}
 
+    public PlaybackResponseObject getPlaybackResponse() {
+        return playbackResponse;
+    }
+
+    public LatestList getPlaylists() {
+        return playlists;
+    }
 }

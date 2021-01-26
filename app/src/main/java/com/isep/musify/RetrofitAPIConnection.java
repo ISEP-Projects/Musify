@@ -7,6 +7,8 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isep.musify.models.ApiResponse;
+import com.isep.musify.models.ApiResponseNewAlbums;
+import com.isep.musify.models.Profile;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 
 import com.isep.musify.models.ArtistTrackResponse;
@@ -99,7 +101,7 @@ public class RetrofitAPIConnection {
         });
     }
 
-    public void getRandomArtists(String AccessToken, Character searchQuery, CustomCallback customCallback){
+    public void getRandomArtists(String AccessToken, Character searchQuery, CustomCallbackSuccess customCallback){
 
         Retrofit retrofit = getRetrofitBuilder(AccessToken);
 
@@ -116,7 +118,7 @@ public class RetrofitAPIConnection {
                 if (response.code() == 200) {
                     //Log.d("Musify", "Response " + response.body().getArtistsList().getArtists().size());
                     //Log.d("Musify", "Data response from API received");
-                    customCallbackSuccess.onSuccess(response.body());
+                    customCallback.onSuccess(response.body());
                 } else {
                     try {
                         Log.d("Musify Body Error", "Response " + response.errorBody().string());

@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickListener {
+public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickListener,ArtistsAdapter.ArtistClickListener, PlaylistAdapter.PlaylistClickListener {
     private String []sTitle = new String[]{"Playlists","Artists","Albums"};
     private TabLayout mTabLayout;
     private RecyclerView recyclerView;
@@ -139,6 +139,7 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
                     List<Image> images = artistsList.get(i).getImages();
                     String href = artistsList.get(i).getHref();
                     String id = artistsList.get(i).getId();
+                    String description = "Artist";
                     Item item = new Item(images.get(images.size()-1), images.get(0), name, description, href);
                     artistsItems.add(item);
                 }
