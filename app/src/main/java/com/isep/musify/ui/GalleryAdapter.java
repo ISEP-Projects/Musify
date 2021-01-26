@@ -32,7 +32,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         @Override
         public void onClick(View view) {
             if (itemClickListener != null) itemClickListener.onGalleryClick(view, getAdapterPosition());
+
         }
+
     }
 
     public GalleryAdapter(List<Item> myDataset) {
@@ -67,7 +69,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         }
     }
 
-    public void setClickListener(GalleryAdapter.GalleryClickListener itemClickListener) {
+    public void setClickListener(GalleryClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
@@ -77,6 +79,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     public interface GalleryClickListener {
         void onGalleryClick(View view, int position);
+
     }
 
 

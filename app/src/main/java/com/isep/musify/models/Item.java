@@ -62,6 +62,8 @@ public class Item implements Parcelable {
         this.playlistId = playlistId;
     }
 
+    public Item(){}
+
     //Item item = new Item(images.get(images.size()-1), images.get(0), name, description, followers, href, artistId);
     //For Playlist Library Item
     public Item(Image icon, Image cover, String name, String description, String followers, String href, String artistId) {
@@ -112,7 +114,15 @@ public class Item implements Parcelable {
         this.description = description;
         this.href = href;
     }
-
+    //New Playlists
+    public Item(Image cover, String name, String description, String href, String playlistId) {
+        this.cover = cover;
+        this.coverUrl = cover.getUrl();
+        this.name = name;
+        this.description = description;
+        this.href = href;
+        this.playlistId=playlistId;
+    }
     protected Item(Parcel in) {
         id = in.readString();
         type = in.readString();

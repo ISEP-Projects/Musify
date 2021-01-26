@@ -81,5 +81,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
     public interface PlaylistClickListener {
         void onPlaylistClick(View view, int position);
+
     }
+
 }

@@ -8,6 +8,12 @@ public class SimplePlaylist {
     private String id;
     private List<Image> images = null;
     private String name;
+
+    public String getHref() {
+        return href;
+    }
+
+    private String href;
     private Profile owner;
 
     public String getDescription() {
@@ -34,13 +40,14 @@ public class SimplePlaylist {
         return tracks;
     }
 
-    public SimplePlaylist(String description, String id, List<Image> images, String name, Profile owner, Track tracks) {
+    public SimplePlaylist(String description, String id, List<Image> images, String name, Profile owner, Track tracks,String href) {
         this.description = description;
         this.id = id;
         this.images = images;
         this.name = name;
         this.owner = owner;
         this.tracks = tracks;
+        this.href=href;
     }
 
     private Track tracks;

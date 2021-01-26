@@ -1,5 +1,6 @@
 package com.isep.musify.ui.home;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.isep.musify.CustomCallbackProfile;
 import com.isep.musify.CustomCallback_Album_Release;
+import com.isep.musify.PlaylistActivity;
 import com.isep.musify.R;
 import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.ui.DataViewModel;
@@ -44,70 +46,69 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements GalleryAdapter.GalleryClickListener {
     TextView profile;
     ImageView imageView;
     private HomeViewModel homeViewModel;
     private DataViewModel dataViewModel;
-    private List<Item> playlistsItems, newPlaylists,newAlbums;
-    private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums,recyclerView_Featured_Playlist;
+    private List<Item> playlistsItems, newPlaylists, newAlbums;
+    private RecyclerView recyclerView_Made_For_You, recyclerView_newAlbums, recyclerView_Featured_Playlist;
     //private TracksAdapter tracksAdapter;
-    private GalleryAdapter galleryAdapter,tracksAdapter;
+    private GalleryAdapter galleryAdapter, tracksAdapter;
     private Timer timer;
     private TimerTask timerTask;
     private int position;
     private LinearLayoutManager layoutManager;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, Bundle savedInstanceState) {
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-         recyclerView_Made_For_You = root.findViewById(R.id.RV_playlist);
-         recyclerView_newAlbums =root.findViewById(R.id.newAlbumReleases);
-         recyclerView_Featured_Playlist=root.findViewById(R.id.FeaturedLists);
+        recyclerView_Made_For_You = root.findViewById(R.id.RV_playlist);
+        recyclerView_newAlbums = root.findViewById(R.id.newAlbumReleases);
+        recyclerView_Featured_Playlist = root.findViewById(R.id.FeaturedLists);
 
 
+        profile = root.findViewById(R.id.profileName);
+        imageView = root.findViewById(R.id.imageView);
 
-        profile=root.findViewById(R.id.profileName);
-        imageView=root.findViewById(R.id.imageView);
-
-       //textView = root.findViewById(R.id.text_home);
+        //textView = root.findViewById(R.id.text_home);
 
 
         init();
-        updateList(playlistsItems,0);
-        updateList(newAlbums,1);
-        updateList(newPlaylists,3);
+        updateMadeforYouList(playlistsItems);
+        updateNewAlbums(newAlbums);
+        updateNewPlaylist(newPlaylists);
         currentUserAPI();
 
-        if(recyclerView_Made_For_You.getAdapter().getItemCount()!=0){
-            position=recyclerView_Made_For_You.getAdapter().getItemCount() / 2;
-            recyclerView_Made_For_You.scrollToPosition(position/2);
+        if (recyclerView_Made_For_You.getAdapter().getItemCount() != 0) {
+            position = recyclerView_Made_For_You.getAdapter().getItemCount() / 2;
+            recyclerView_Made_For_You.scrollToPosition(position / 2);
         }
-        if(recyclerView_newAlbums.getAdapter().getItemCount()!=0){
-            position=recyclerView_newAlbums.getAdapter().getItemCount() / 2;
-            recyclerView_newAlbums.scrollToPosition(position/2);
+        if (recyclerView_newAlbums.getAdapter().getItemCount() != 0) {
+            position = recyclerView_newAlbums.getAdapter().getItemCount() / 2;
+            recyclerView_newAlbums.scrollToPosition(position / 2);
         }
-        if(recyclerView_Featured_Playlist.getAdapter().getItemCount()!=0){
-            position=recyclerView_Featured_Playlist.getAdapter().getItemCount() / 2;
-            recyclerView_Featured_Playlist.scrollToPosition(position/2);
+        if (recyclerView_Featured_Playlist.getAdapter().getItemCount() != 0) {
+            position = recyclerView_Featured_Playlist.getAdapter().getItemCount() / 2;
+            recyclerView_Featured_Playlist.scrollToPosition(position / 2);
         }
         SnapHelper snapHelper = new LinearSnapHelper();
-        SnapHelper snapHelper1= new LinearSnapHelper();
-        SnapHelper snapHelper2=new LinearSnapHelper();
+        SnapHelper snapHelper1 = new LinearSnapHelper();
+        SnapHelper snapHelper2 = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView_Made_For_You);
-        recyclerView_Made_For_You.smoothScrollBy(5,0);
+        recyclerView_Made_For_You.smoothScrollBy(5, 0);
         snapHelper1.attachToRecyclerView(recyclerView_newAlbums);
-        recyclerView_newAlbums.smoothScrollBy(5,0);
+        recyclerView_newAlbums.smoothScrollBy(5, 0);
         snapHelper2.attachToRecyclerView(recyclerView_Featured_Playlist);
-        recyclerView_Featured_Playlist.smoothScrollBy(5,0);
-
-
+        recyclerView_Featured_Playlist.smoothScrollBy(5, 0);
 
 
         return root;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -119,6 +120,7 @@ public class HomeFragment extends Fragment {
         super.onPause();
         stopAutoScrollBanner();
     }
+
     private void currentUserAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
         apiConnection.currentUserApiRequest(dataViewModel.getAccessToken(), new CustomCallbackProfile() {
@@ -127,23 +129,23 @@ public class HomeFragment extends Fragment {
             @Override
             public void onProfileSuccess(Profile value) {
                 //Saving objects of different types into a unified list to display in Recyclerview
-           profile.setText("Welcome back! "+value.getDisplay_name());
+                profile.setText("Welcome back! " + value.getDisplay_name());
                 List<Image> image = value.getImages();
                 imageView.setClipToOutline(true);
 
-try {
-    Picasso.get()
-            .load(image.get(0).getUrl())
-            .into(imageView);
-}catch(Exception e){
-    //If no profile image
-    Log.d("No progile image", e.getMessage());
-    TextDrawable drawable = TextDrawable.builder()
-            .buildRect(String.valueOf(value.getDisplay_name().charAt(0)), Color.RED);
-    imageView.setImageDrawable(drawable);
-}
-           Log.d("Profile value = ",""+value);
-           // textView.setText((CharSequence) value.getProfile().getName());
+                try {
+                    Picasso.get()
+                            .load(image.get(0).getUrl())
+                            .into(imageView);
+                } catch (Exception e) {
+                    //If no profile image
+                    Log.d("No progile image", e.getMessage());
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRect(String.valueOf(value.getDisplay_name().charAt(0)), Color.RED);
+                    imageView.setImageDrawable(drawable);
+                }
+                Log.d("Profile value = ", "" + value);
+                // textView.setText((CharSequence) value.getProfile().getName());
             }
 
 
@@ -155,7 +157,7 @@ try {
         });
     }
 
-    private void newAlbumsAPI(){
+    private void newAlbumsAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
         apiConnection.NewReleasesApiRequest(dataViewModel.getAccessToken(), new CustomCallback_Album_Release() {
             @Override
@@ -163,21 +165,19 @@ try {
 
                 List<NewReleases> playlists = value.getReleases().getAlbums();
 
-                for(int i = 0; i < playlists.size(); i++){
-                    Log.d("Content",""+playlists.get(i).toString());
+                for (int i = 0; i < playlists.size(); i++) {
+                    Log.d("Content", "" + playlists.get(i).toString());
                     String name = playlists.get(i).getName();
                     String description = "by " + playlists.get(0).getArtists().get(0).getName();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
+                    Item item = new Item(images.get(images.size() - 1), name, description, href);
 
 
                     newAlbums.add(item);
                 }
-                updateList(newAlbums,1);
+                updateNewAlbums(newAlbums);
             }
-
-
 
 
             @Override
@@ -190,28 +190,24 @@ try {
     }
 
 
-    public void init(){
+    public void init() {
         playlistsItems = new ArrayList<>();
-        newAlbums=new ArrayList<>();
-        newPlaylists=new ArrayList<>();
+        newAlbums = new ArrayList<>();
+        newPlaylists = new ArrayList<>();
         playlistsSpotifyAPI();
         latestPlaylistSpotifyAPI();
         newAlbumsAPI();
 
     }
 
-
-    public void updateList(List<Item> list, int flag){
-
-             layoutManager   = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
-switch(flag) {
-    case 0:
+    public void updateMadeforYouList(List<Item> list) {
+        layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_Made_For_You.setHasFixedSize(true);
         recyclerView_Made_For_You.setLayoutManager(layoutManager);
         tracksAdapter = new GalleryAdapter(list);
+        tracksAdapter.setClickListener(this::onGalleryClick);
         tracksAdapter.notifyDataSetChanged();
         recyclerView_Made_For_You.setAdapter(tracksAdapter);
-
         recyclerView_Made_For_You.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -235,8 +231,9 @@ switch(flag) {
                 }
             }
         });
-        break;
-    case 1:
+    }
+    public void updateNewAlbums(List<Item> list) {
+        layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_newAlbums.setHasFixedSize(true);
         recyclerView_newAlbums.setLayoutManager(layoutManager);
         tracksAdapter = new GalleryAdapter(list);
@@ -266,11 +263,14 @@ switch(flag) {
                 }
             }
         });
-        break;
-    case 3:
+
+    }
+    public void updateNewPlaylist(List<Item> list) {
+        layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_Featured_Playlist.setHasFixedSize(true);
         recyclerView_Featured_Playlist.setLayoutManager(layoutManager);
         galleryAdapter = new GalleryAdapter(list);
+        galleryAdapter.setClickListener(this::onGalleryClick);
         galleryAdapter.notifyDataSetChanged();
         recyclerView_Featured_Playlist.setAdapter(galleryAdapter);
 
@@ -297,25 +297,27 @@ switch(flag) {
                 }
             }
         });
-    } }
+    }
+
     public void playlistsSpotifyAPI() {
         RetrofitAPIConnection apiConnection = new RetrofitAPIConnection();
-        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new  CustomCallbackSuccess() {
+        apiConnection.playlistsApiRequest(dataViewModel.getAccessToken(), new CustomCallbackSuccess() {
             @Override
             public void onSuccess(ApiResponse value) {
                 Log.d("library", "onSuccess response: " + value);
 
                 List<LibraryItem> playlists = value.getLibraryItems();
 
-                for(int i = 0; i < playlists.size(); i++){
+                for (int i = 0; i < playlists.size(); i++) {
                     String name = playlists.get(i).getName();
                     String description = "by " + playlists.get(i).getOwner().getDisplay_name();
                     List<Image> images = playlists.get(i).getImages();
                     String href = playlists.get(i).getHref();
-                    Item item = new Item(images.get(images.size()-1), name, description, href);
-                    playlistsItems.add(item);
+                    String playlistId = playlists.get(i).getId();
+                    Item item = new Item(images.get(images.size() - 1), name, description, href,playlistId);
+                    newPlaylists.add(item);
                 }
-                updateList(playlistsItems,0);
+                updateMadeforYouList(newPlaylists);
             }
 
             @Override
@@ -340,14 +342,16 @@ switch(flag) {
 
                 List<SimplePlaylist> playlists = value.getFeaturedList().getFeaturedLists();
 
-                for(int i = 0; i < playlists.size(); i++){
+                for (int i = 0; i < playlists.size(); i++) {
                     String name = playlists.get(i).getName();
                     String description = "by " + playlists.get(i).getDescription();
+                    String href = playlists.get(i).getHref();
                     List<Image> images = playlists.get(i).getImages();
-                    Item item = new Item(images.get(images.size()-1), name, description, "");
-                   newPlaylists.add(item);
+                    String playlistId = playlists.get(i).getId();
+                    Item item = new Item(images.get(images.size() - 1), name, description, href,playlistId);
+                    newPlaylists.add(item);
                 }
-                updateList(newPlaylists,3);
+                updateNewPlaylist(newPlaylists);
             }
 
             @Override
@@ -381,7 +385,7 @@ switch(flag) {
                 @Override
                 public void run() {
                     if (position == Integer.MAX_VALUE) {
-                        position = Integer.MAX_VALUE/2;
+                        position = Integer.MAX_VALUE / 2;
                         recyclerView_Made_For_You.scrollToPosition(position);
                         recyclerView_Made_For_You.smoothScrollBy(5, 0);
                         recyclerView_newAlbums.scrollToPosition(position);
@@ -398,6 +402,17 @@ switch(flag) {
             };
             timer.schedule(timerTask, 4000, 4000);
         }
+    }
+
+    @Override
+    public void onGalleryClick(View view, int position) {
+        Intent i = new Intent(getActivity(), PlaylistActivity.class);
+        i.putExtra("AccessToken", dataViewModel.getAccessToken());
+        i.putExtra("PlaylistId", newPlaylists.get(position).getPlaylistId());
+        i.putExtra("playlistName", newPlaylists.get(position).getName());
+        i.putExtra("playlistDescription", newPlaylists.get(position).getDescription());
+        i.putExtra("imageHref",newPlaylists.get(position).getCoverUrl());
+        startActivity(i);
     }
 
 
