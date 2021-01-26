@@ -120,12 +120,14 @@ public class PlaylistActivity extends AppCompatActivity implements SongAdapter.S
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songAdapter = new SongAdapter(list);
         songAdapter.notifyDataSetChanged();
+        songAdapter.setClickListener(this);
         recyclerView.setAdapter(songAdapter);
     }
 
     @Override
-    public void onClick(View view, int position) {
+    public void onSongClick(View view, int position) {
         Log.d("Musify", "Clicked on " + position);
+
 
     }
 }

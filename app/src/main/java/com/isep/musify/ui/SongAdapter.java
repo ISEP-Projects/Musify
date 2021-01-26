@@ -33,7 +33,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
         }
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onClick(view, getAdapterPosition());
+            if (itemClickListener != null) itemClickListener.onSongClick(view, getAdapterPosition());
         }
     }
 
@@ -80,6 +80,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> 
     }
 
     public interface SongClickListener {
-        void onClick(View view, int position);
+        void onSongClick(View view, int position);
     }
 }
