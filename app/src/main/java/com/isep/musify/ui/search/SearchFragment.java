@@ -2,14 +2,12 @@ package com.isep.musify.ui.search;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,16 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.isep.musify.CustomCallbackSuccess;
 import com.isep.musify.R;
 import com.isep.musify.RetrofitAPIConnection;
-import com.isep.musify.TrackDetails;
+import com.isep.musify.MusicPlayer;
 import com.isep.musify.models.Album;
 import com.isep.musify.models.ApiResponse;
-import com.isep.musify.models.ApiResponseNewAlbums;
 import com.isep.musify.models.Artist;
 import com.isep.musify.models.ArtistTrackResponse;
 import com.isep.musify.models.Image;
 import com.isep.musify.models.Item;
-
-import com.isep.musify.models.PlaylistResponse;
 
 import com.isep.musify.models.Track;
 import com.isep.musify.ui.DataViewModel;
@@ -175,7 +170,7 @@ public class SearchFragment extends Fragment implements ItemsAdapter.ItemClickLi
         Item item = itemsList.get(position);
         switch(item.getType()){
             case "Track":
-                Intent i = new Intent(getContext(), TrackDetails.class);
+                Intent i = new Intent(getContext(), MusicPlayer.class);
                 i.putExtra("AccessToken", dataViewModel.getAccessToken());
                 i.putExtra("Track", itemsList.get(position));
                 startActivity(i);
