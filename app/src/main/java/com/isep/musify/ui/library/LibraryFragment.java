@@ -241,8 +241,8 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
     public void onArtistClick(View view, int position) {
         Intent i = new Intent(getActivity(), ArtistActivity.class);
         i.putExtra("AccessToken", dataViewModel.getAccessToken());
-        i.putExtra("ArtistId", artistsItems.get(position).getId());
-        i.putExtra("ArtistName", artistsItems.get(position).getName());
+        i.putExtra("ArtistId", artistsItems.get(position).getArtistId());
+        i.putExtra("ArtistName", artistsItems.get(position).getArtistName());
         i.putExtra("Followers", artistsItems.get(position).getFollowers());
         i.putExtra("imageHref",artistsItems.get(position).getIcon().getUrl());
         startActivity(i);

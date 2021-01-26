@@ -1,5 +1,6 @@
 package com.isep.musify;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistActivity  extends AppCompatActivity {
+public class ArtistActivity  extends AppCompatActivity implements SongAdapter.SongClickListener {
     private String accessToken, artistId, imageHref, artistName, followers;
     private DataViewModel dataViewModel;
     private List<Item> songslistItems;
@@ -93,10 +94,14 @@ public class ArtistActivity  extends AppCompatActivity {
                 List<Track> songslist = value.getTracks();
 
                 for(int i = 0; i < songslist.size(); i++){
+                    String id = songslist.get(i).getId();
                     String name = songslist.get(i).getName();
-                    String artistName = songslist.get(i).getArtists().get(0).getName();
+                    String description = songslist.get(i).getArtists().get(0).getName();
                     List<Image> images = songslist.get(i).getAlbum().getImages();
-                    Item item = new Item(name, artistName, images.get(images.size()-1));
+                    String href = songslist.get(i).getHref();
+                    String uri = songslist.get(i).getUri();
+                    //Item item = new Item(name, artistName, images.get(images.size()-1));
+                    Item item = new Item(id, "Track", images.get(images.size()-1), images.get(0), name, description, href, uri, i);
                     songslistItems.add(item);
                 }
                 Log.d("songslist",songslistItems.toString());
@@ -115,7 +120,16 @@ public class ArtistActivity  extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songAdapter = new SongAdapter(list);
         songAdapter.notifyDataSetChanged();
+        songAdapter.setClickListener(this::onSongClick);
         recyclerView.setAdapter(songAdapter);
     }
 
+    @Override
+    public void onSongClick(View view, int position) {
+        Log.d("Musify", "Clicking on " + songslistItems.get(position).getName());
+        Intent i = new Intent(this, MusicPlayer.class);
+        i.putExtra("AccessToken", dataViewModel.getAccessToken());
+        i.putExtra("Track", songslistItems.get(position));
+        startActivity(i);
+    }
 }
