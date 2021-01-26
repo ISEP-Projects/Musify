@@ -227,7 +227,6 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
         albumsSpotifyAPI();
     }
 
-
     @Override
     public void onPlaylistClick(View view, int position) {
         Intent i = new Intent(getActivity(), PlaylistActivity.class);
@@ -236,7 +235,6 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
         i.putExtra("playlistName", playlistsItems.get(position).getName());
         i.putExtra("playlistDescription", playlistsItems.get(position).getDescription());
         i.putExtra("imageHref",playlistsItems.get(position).getIcon().getUrl());
-        //Log.d("Musify",playlistsItems.get(position).getId());
         startActivity(i);
     }
     @Override
