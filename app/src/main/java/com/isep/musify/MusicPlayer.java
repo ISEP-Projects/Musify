@@ -22,7 +22,7 @@ import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 
 
-public class TrackDetails extends AppCompatActivity {
+public class MusicPlayer extends AppCompatActivity {
 
     Credentials credentials = new Credentials();
     private final String CLIENT_ID = credentials.getClientID();
@@ -38,7 +38,7 @@ public class TrackDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_track_details);
+        setContentView(R.layout.activity_music_player);
 
         trackImage = findViewById(R.id.trackImage);
         trackName = findViewById(R.id.trackName);

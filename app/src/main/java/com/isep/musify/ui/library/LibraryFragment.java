@@ -252,6 +252,6 @@ public class LibraryFragment extends Fragment implements ItemsAdapter.ItemClickL
 
     @Override
     public void onItemClick(View view, int position) {
-
+        Toast.makeText(getContext().getApplicationContext(), "Clicked " + view.toString() + " at position " + position, Toast.LENGTH_LONG).show();
     }
 }
